@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: enigma2\n"
 "Report-Msgid-Bugs-To: https://droidsat.org/forum/\n"
 "POT-Creation-Date: 2011-1-05 14:38+0200\n"
-"PO-Revision-Date: 2019-04-20 03:49+0200\n"
+"PO-Revision-Date: 2019-04-29 10:34+0200\n"
 "Last-Translator: FULL NAME <Opendroid-Team <opendroid2013@gmail.com>, >\n"
 "Language-Team: Gimsy,Formiano,erminio\n"
 "Language: it\n"
@@ -3206,10 +3206,6 @@ msgstr "USB posteriore inferiore"
 
 msgid "Back, upper USB"
 msgstr "USB posteriore superiore"
-
-#, python-format
-msgid "Back-up Tool for a %s\n"
-msgstr "Back-up Tool per  %s\n"
 
 msgid "Back/Recall"
 msgstr "Indietro/Richiama"
@@ -19823,3 +19819,104 @@ msgstr ""
 "Altre opzioni motore ti permettono di inserire dettagli dalla scheda tecnica "
 "del tuo motore in modo che l'enigma possa calcolare il tempo necessario per "
 "spostarsi su un altro satellite."
+
+msgid ""
+"You can select with yellow the OnlineFlash Image\n"
+" or select Recovery to create a USB Disk Image for clean Install."
+msgstr ""
+"È possibile selezionare l'immagine OnlineFlash con 'Giallo'\n"
+"oppure selezionare 'Ripristino' per creare un'immagine USB per un'installazione pulita."
+
+msgid ""
+"HDD = Do you want to make a USB-back-up image on HDD? \n"
+"This only takes 1 or 10 minutes and is fully automatic."
+msgstr ""
+"HDD = Vuoi fare un backup sull'HDD? \n"
+"Richiede da 1 a 10 minuti e funziona in modo completamente automatico."
+
+msgid "Back-up Tool for an %s\n"
+msgstr "Strumento di backup per uno %s\n"
+
+msgid "Back-up Tool for a %s\n"
+msgstr "Strumento di backup per %s\n"
+
+msgid "because of the used filesystem the back-up\n"
+msgstr "a secondo del sistema, il backup richiede\n"
+
+msgid "will take about 30 minutes for this system\n"
+msgstr "ci vorranno circa 30 minuti per questo sistema\n"
+
+msgid "will take about 1-15 minutes for this system\n"
+msgstr "ci vorranno circa 1-15 minuti per questo sistema\n"
+
+msgid "Almost there... "
+msgstr "Quasi lì... "
+
+msgid "Now building the Backup Image"
+msgstr "Costruisci l'immagine di backup ora"
+
+msgid "Multiboot Image created on: %s"
+msgstr "Immagine avvio multiplo creata su: %s"
+
+msgid "Please wait...almost ready! "
+msgstr "Per favore aspetta ... quasi fatto! "
+
+msgid "To restore the image:"
+msgstr "Per ripristinare l'immagine:"
+
+msgid "Use OnlineFlash in SoftwareManager"
+msgstr "Utilizzare il flash online in Software Manager"
+
+msgid "Please check the manual of the receiver"
+msgstr "Si prega di controllare il manuale del ricevitore"
+
+msgid "on how to restore the image"
+msgstr "su come ripristinare l'immagine"
+
+msgid "Image creation failed - "
+msgstr "La creazione dell'immagine non è riuscita - "
+
+msgid "Probable causes could be"
+msgstr "Le cause probabili potrebbero essere"
+
+msgid "     wrong back-up destination "
+msgstr "     destinazione errata di back-up "
+
+msgid "     no space left on back-up device"
+msgstr "     nessuno spazio lasciato sul dispositivo di backup"
+
+msgid "     no writing permission on back-up device"
+msgstr "     nessuna autorizzazione di scrittura per il dispositivo di backup"
+
+msgid "Kernel dump error\n"
+msgstr "Errore di scarico del kernel\n"
+
+msgid "Please Flash your Kernel new and Backup again"
+msgstr "Per favore Flash il tuo kernel nuovo e Backup di nuovo"
+
+msgid "Create: Recovery Fullbackup %s"
+msgstr "Crea: Ripristino Fullbackup %s"
+
+msgid "Create:"
+msgstr "Creare:"
+
+msgid "To back-up directly to the USB-stick, the USB-stick MUST\n"
+msgstr "Per eseguire il backup direttamente sulla penna USB, la chiavetta USB DEVE\n"
+
+msgid ""
+"contain a file with the name: \n"
+"\n"
+msgstr ""
+"contenere un file con il nome:\n"
+"\n"
+
+msgid "backupstick or backupstick.txt"
+msgstr "backupstick o backupstick.txt"
+
+msgid ""
+"Not enough free space on /media/usb !!\n"
+"You need at least 300Mb free space.\n"
+msgstr ""
+"Spazio libero insufficiente su /media/usb !!\n"
+"\n"
+"Hai bisogno di almeno 300 MB di spazio libero.\n"
