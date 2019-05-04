@@ -6,11 +6,19 @@ from boxbranding import getBoxType, getImageDistro, getMachineName, getMachineBr
 from os import path
 media_nf = '/media/opdboot'
 mediahome = media_nf + '/OPDBootI/'
-
-extensions_path = '/usr/lib/enigma2/python/Plugins/Extensions/'
+extensions_path = '/usr/lib64/enigma2/python/Plugins/Extensions/'
 extensions_path_extractpy = extensions_path + 'OPDBoot/ubi_reader/ubi_extract_files.py'
 extensions_path_extractpyo = extensions_path_extractpy + 'o'
 dev_null = ' > /dev/null 2>&1'
+
+if not os.path.exists("/Extensions"):
+        if os.path.islink("/usr/lib64/enigma2"):
+                src = '/usr/lib6464/enigma2/python/Plugins/Extensions'
+        else:
+                src = '/usr/lib64/enigma2/python/Plugins/Extensions'
+        dst = '/Extensions'
+        os.symlink(src, dst)
+OPDBoot_extensions_path = "/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot"
 
 def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimagefolder, getMachineRootFile, getImageArch):
         media_opendroid_target = mediahome + target
@@ -47,7 +55,7 @@ def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimag
 
         os.system('mkdir -p ' + media_opendroid_target + '/media/usb' + dev_null)
 
-        list_four = ['/etc/fstab', '/usr/lib/enigma2/python/Components/config.py', '/usr/lib/enigma2/python/Tools/HardwareInfoVu.py']
+        list_four = ['/etc/fstab', '/usr/lib64/enigma2/python/Components/config.py', '/usr/lib64/enigma2/python/Tools/HardwareInfoVu.py']
         for entrie in list_four:
                 filename = media_opendroid_target + entrie
                 tempfile = filename + '.tmp'
@@ -83,7 +91,7 @@ def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimag
         if os.path.exists(filename):
                 os.system('echo "BlackHole 2.0.9" > ' + filename)
 
-        mypath = media_opendroid_target + '/usr/lib/opkg/info/'
+        mypath = media_opendroid_target + '/usr/lib64/opkg/info/'
         if not os.path.exists(mypath):
                 mypath = media_opendroid_target + '/var/lib/opkg/info/'
 
@@ -140,7 +148,7 @@ def OPDBootExtract(source, target, zipdelete, getimagefolder, getMachineRootFile
                         os.system('rm -rf ' + sourcefile)
                 else:
                         os.system('echo "[OPDBoot] keep  %s for next time"'% sourcefile)
-                if "cortexa15hf-neon-vfpv4" in getImageArch:
+                if "aarch64" in getImageArch:
                         if os.path.exists(media_nf + '/OPDBootUpload/%s'% getimagefolder):
                                 os.chdir('%s'% getimagefolder)
                         print '[OPDBoot] Extracting tar.bz2 image and moving extracted image to our target'

@@ -22,6 +22,17 @@ import os
 from skin import parseColor
 from enigma import getDesktop
 from Components.ScrollLabel import ScrollLabel
+if not os.path.exists("/Extensions"):
+        if os.path.islink("/usr/lib64/enigma2"):
+                src = '/usr/lib6464/enigma2/python/Plugins/Extensions'
+        else:
+                src = '/usr/lib64/enigma2/python/Plugins/Extensions'
+        dst = '/Extensions'
+        os.symlink(src, dst)
+
+OPDBoot_extensions_path = "/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot"
+OPDBoot_client_extensions_path = "/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot_client"
+
 PLUGINVERSION = 'V.3.0 - OPD Team'
 OPDBootInstallation_Skin = '\n\t\t<screen name="OPDBootInstallation" position="center,center" size="902,380" title="OPDBoot - Installation" >\n\t\t      <widget name="label1" position="10,10" size="840,30" zPosition="1" halign="center" font="Regular;25" backgroundColor="#9f1313" transparent="1"/>\n\t\t      <widget name="label2" position="10,80" size="840,290" zPosition="1" halign="center" font="Regular;20" backgroundColor="#9f1313" transparent="1"/>\n\t\t      <widget name="config" position="10,160" size="840,200" scrollbarMode="showOnDemand" transparent="1"/>\n\t\t      <ePixmap pixmap="skin_default/buttons/red.png" position="10,290" size="140,40" alphatest="on" />\n\t\t      <ePixmap pixmap="skin_default/buttons/green.png" position="150,290" size="140,40" alphatest="on" />\n\t\t      <ePixmap pixmap="skin_default/buttons/blue.png" position="300,290" size="140,40" alphatest="on" />\n\t\t      <widget name="key_red" position="10,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t      <widget name="key_green" position="150,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t      <widget name="key_blue" position="300,290" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />\n\t\t</screen>'
 OPDBootImageChoose_Skin = '\n\t\t<screen name="OPDBootImageChoose" position="center,center" size="902,380" title="OPDBoot - Menu">\n\t\t\t<widget name="label2" position="145,10" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label3" position="145,35" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label4" position="145,60" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label5" position="145,85" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label6" position="420,10" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label7" position="420,35" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label8" position="420,60" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label9" position="420,85" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label10" position="145,110" size="440,30" zPosition="1" font="Regular;20" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="label11" position="420,110" size="440,30" zPosition="1" halign="right" font="Regular;20" backgroundColor="#9f1313" foregroundColor="#00389416" transparent="1" />\n\t\t\t<widget name="label1" position="25,145" size="840,22" zPosition="1" halign="center" font="Regular;18" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="device_icon" position="25,20" size="80,80" alphatest="on" />\n\t\t\t<widget name="free_space_progressbar" position="265,42" size="500,13" borderWidth="1" zPosition="3" />\n\t\t\t<widget name="config" position="25,180" size="840,150" scrollbarMode="showOnDemand" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/red.png" position="10,340" size="150,40" alphatest="on" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/green.png" position="185,340" size="150,40" alphatest="on" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/yellow.png" position="360,340" size="150,40" alphatest="on" />\n\t\t\t<ePixmap pixmap="skin_default/buttons/blue.png" position="535,340" size="150,40" alphatest="on" />\n\t\t\t<widget name="key_red" position="5,center" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="key_green" position="180,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />\n\t\t\t<widget name="key_yellow" position="355,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />\n\t\t\t<widget name="key_blue" position="530,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />\n\t\t<widget name="key_menu" position="705,340" zPosition="1" size="160,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" /><ePixmap pixmap="skin_default/buttons/menu.png" position="710,340" size="150,40" alphatest="on" /></screen>'
@@ -240,11 +251,11 @@ class OPDBootInstallation(Screen):
                                         if line.find(self.mysel):
                                                 mntdev = line.split(' ')[0]
                                 f.close()
-                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 os.system("mv /etc/fstab /etc/fstab1")
                                 os.system("grep -v  /media/opdboot /etc/fstab1 > /etc/fstab")
                                 os.system("rm /etc/fstab1")
-                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 fstabuuid = os.popen('blkid -s UUID -o value ' + mntdev).read()
                                 fstabuuidwrite = 'UUID=' + fstabuuid.strip() + '        /media/opdboot        auto        defaults	       1        1'
                                 fileHandle = open ('/etc/fstab', 'a')
@@ -261,10 +272,10 @@ class OPDBootInstallation(Screen):
                         out2 = open('/media/opdboot/OPDBootI/.opdboot', 'w')
                         out2.write('Flash')
                         out2.close()
-                        out = open('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
+                        out = open('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
                         out.write(self.mysel)
                         out.close()
-                        os.system('cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
+                        os.system('cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
                         image = getImageDistro()
                         if fileExists('/etc/image-version'):
                                 if 'build' not in image:
@@ -287,11 +298,11 @@ class OPDBootInstallation(Screen):
                                         if line.find(self.mysel):
                                                 mntdev = line.split(' ')[0]
                                 f.close()
-                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 os.system("mv /etc/fstab /etc/fstab1")
                                 os.system("grep -v  /media/opdboot /etc/fstab1 > /etc/fstab")
                                 os.system("rm /etc/fstab1")
-                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 fstabuuid = os.popen('blkid -s UUID -o value ' + mntdev).read()
                                 fstabuuidwrite = 'UUID=' + fstabuuid.strip() + '        /media/opdboot        auto        defaults	       1        1'
                                 fileHandle = open('/etc/fstab', 'a')
@@ -299,16 +310,16 @@ class OPDBootInstallation(Screen):
                                 fileHandle.close()
                         cmd = 'mkdir ' + self.mysel + 'OPDBootI;mkdir ' + self.mysel + 'OPDBootUpload'
                         os.system(cmd)
-                        os.system('cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit')
+                        os.system('cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit')
                         os.system('chmod 777 /sbin/opdinit;chmod 777 /sbin/init;ln -sfn /sbin/opdinit /sbin/init')
                         os.system('mv /etc/init.d/volatile-media.sh /etc/init.d/volatile-media.sh.back')
                         out2 = open('/media/opdboot/OPDBootI/.opdboot', 'w')
                         out2.write('Flash')
                         out2.close()
-                        out = open('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
+                        out = open('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
                         out.write(self.mysel)
                         out.close()
-                        os.system('cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
+                        os.system('cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
                         image = getImageDistro()
                         if fileExists('/etc/image-version'):
                                 if 'build' not in image:
@@ -382,11 +393,11 @@ class OPDBootImageChoose(Screen):
                                 cmd1 = 'chmod 777 /sbin/opdinit;chmod 777 /sbin/init;ln -sfn /sbin/opdinit /sbin/init'
                                 self.session.openWithCallback(self.close, Console, _('OPDBoot work with Bootmanager by Booting!'), [cmd0, cmd1])
                         if choice[1] == 'withoutopdboot':
-                                cmd0 = 'cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit'
+                                cmd0 = 'cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit'
                                 cmd1 = 'chmod 777 /sbin/opdinit;chmod 777 /sbin/init;ln -sfn /sbin/opdinit /sbin/init'
                                 self.session.openWithCallback(self.updateList, Console, _('OPDBoot work without Bootmanager by Booting!'), [cmd0, cmd1])
                         if choice[1] == 'bootmanagertimeout':
-                                self.session.openWithCallback(self.setupDone, Setup, 'bootmanagertimeout', '/usr/lib/enigma2/python/OPENDROID')
+                                self.session.openWithCallback(self.setupDone, Setup, 'bootmanagertimeout', '/usr/lib64/enigma2/python/OPENDROID')
                         return 
 
         def setupDone(self, test=None):
@@ -408,7 +419,7 @@ class OPDBootImageChoose(Screen):
         def updateList(self):
                 self.list = []
                 try:
-                        pluginpath = '/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot'
+                        pluginpath = '/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot'
                         f = open(pluginpath + '/.opdboot_location', 'r')
                         mypath = f.readline().strip()
                         f.close()
@@ -661,7 +672,7 @@ class OPDBootImageChoose(Screen):
                                 cmd5 = 'mv /etc/init.d/volatile-media.sh.back /etc/init.d/volatile-media.sh'
                                 cmd6 = 'rm /media/opdboot/OPDBootI/.opdboot'
                                 cmd7 = 'rm /media/opdboot/OPDBootI/.Flash'
-                                cmd8 = 'rm /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'
+                                cmd8 = 'rm /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'
                                 cmd8a = "echo -e '\n\nOPDBoot remove complete....'"
                                 self.session.openWithCallback(self.close, Console, _('OPDBoot is removing...'), [cmd0, cmd1, cmd1a, cmd2, cmd3, cmd4, cmd4a, cmd5, cmd6, cmd7, cmd8, cmd8a])
                         if choice[1] == 'rmallimg':
@@ -749,7 +760,7 @@ class OPDBootImageInstall(Screen, ConfigListScreen):
 
         def imageInstall(self):
                 if self.check_free_space():
-                        pluginpath = '/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot'
+                        pluginpath = '/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot'
                         myerror = ''
                         source = self.source.value.replace(' ', '')
                         target = self.target.value.replace(' ', '')
@@ -815,7 +826,7 @@ def main(session, **kwargs):
         m = checkkernel()
         if m == 1:
                 try:
-                        f = open('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'r')
+                        f = open('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'r')
                         mypath = f.readline().strip()
                         f.close()
                         if not fileExists('/media/opdboot'):
@@ -835,7 +846,7 @@ def main(session, **kwargs):
                 except:
                         pass
 
-                if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'):
+                if fileExists('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'):
                         if fileExists('/media/opdboot/OPDBootI/.opdboot'):
                                 session.open(OPDBootImageChoose)
                         else:
@@ -873,17 +884,15 @@ class info(Screen):
                         self.updatetext()
 
         def updatetext(self):
-                message = _('GUIDE FOR CORRECT INSTALLATION OF OPDBOOT.\n\n')
-                message += _('Attention! During the entire installation process does not restart the receiver!\n\n')
-                message += _('Warning! for the correct functioning of OPDboot, a USB or HDD memory is required, formatted in the Linux ext3 or ext4 system files\n\n')
-                message += _('1. If you do not have a media formatted in ext3 or ext4, open menu, general configurations, system, storage device, select the drive and format it.\n\n')
-                message += _('2. Go to the mount device manager from the OPD panel, services, device mount management and install hdd and usb correctly.\n\n')
-                message += _('3. Now install OPDboot on the device by going to: menu, multiboot OPD.\n\n')
-                message += _('4. On OPDboot press: menu to choose the type of start. Attention select: Start without Bootmanager for 64Bit devices.\n\n')
-                message += _('5. Press the green button and select the source to install the multiboot image.\n\n')
-                message += _('6. Downloaded the image, we have the possibility to choose whether to copy the settings from the flash image! choose YES if we want to import the settings, the password, network configurations etc ...\n\n')
-                message += _('7. In case of problems with the installation, cancel and ask OpenDroid-Team for support on:\n\n')
-                message += _('https://droidsat.org/forum')
+                message = _('During the entire installation process does not restart the receiver !!!\n\n')
+                message += _('For proper operation OF boot type device is required USB stick or HDD, formatted on your system files Linux ext3 or ext4..\n\n')
+                message += _('1. If you do not have a media formatted with the ext3 or ext4 open  Device Manager <Initialize>, select the drive and format it.\n\n')
+                message += _('2. Go to the device manager and install correctly hdd and usb ...\n\n')
+                message += _('3. Install OPDboot on the selected device.\n\n')
+                message += _('4. key menu settings select the type of boot...\n\n')
+                message += _('5. key green select the firmware source.\n\n')
+                message += _('6. In the event of a problem with the installation cancel and  inform OpenDroid Team.\n\n')
+                message += _('https://droidsat.org/forum/ !!!')
                 self['lab1'].show()
                 self['lab1'].setText(message)
 
