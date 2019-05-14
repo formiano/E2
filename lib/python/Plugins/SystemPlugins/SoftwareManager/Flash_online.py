@@ -117,8 +117,8 @@ class FlashOnline(Screen):
 			for media in ['/media/%s' % x for x in os.listdir('/media')] + (['/media/net/%s' % x for x in os.listdir('/media/net')] if os.path.isdir('/media/net') else []):
 				if not(SystemInfo['HasMMC'] and "/mmc" in media) and os.path.isdir(media):
 					getImages(media, [os.path.join(media, x) for x in os.listdir(media) if os.path.splitext(x)[1] == ".zip" and box in x])
-					if "downloaded_images" in os.listdir(media):
-						media = os.path.join(media, "downloaded_images")
+					if "images" in os.listdir(media):
+						media = os.path.join(media, "images")
 						if os.path.isdir(media) and not os.path.islink(media) and not os.path.ismount(media):
 							getImages(media, [os.path.join(media, x) for x in os.listdir(media) if os.path.splitext(x)[1] == ".zip" and box in x])
 							for dir in [dir for dir in [os.path.join(media, dir) for dir in os.listdir(media)] if os.path.isdir(dir) and os.path.splitext(dir)[1] == ".unzipped"]:
@@ -239,7 +239,7 @@ class FlashOnline(Screen):
 			self["key_green"].setText("")
 		else:
 			if currentSelected[0][1] == "Expander":
-				self["key_green"].setText(_("Compress") if currentSelected[0][0] in self.expanded else _("Expand"))
+				self["key_green"].setText(_("Collapse") if currentSelected[0][0] in self.expanded else _("Expand"))
 				self["description"].setText("")
 			else:
 				self["key_green"].setText(_("Flash Image"))
@@ -302,8 +302,7 @@ class FlashImage(Screen):
 		if SystemInfo["canMultiBoot"]:
 			self.getImageList = GetImagelist(self.getImagelistCallback)
 		else:
-			choices = [(_("Yes, with backup"), "with backup"), (_("Yes, without backup"), "without backup"), (_("No, do not flash image"), False)]
-			self.session.openWithCallback(self.checkMedia, MessageBox, self.message , list=choices, default=False, simple=True)
+			self.checkMedia(True)
 
 	def getImagelistCallback(self, imagedict):
 		self.saveImageList = imagedict
@@ -311,19 +310,14 @@ class FlashImage(Screen):
 		choices = []
 		currentimageslot = GetCurrentImage()
 		for x in range(1, SystemInfo["canMultiBoot"][1] + 1):
-			choices.append(((_("slot%s - %s (current image) with, backup") if x == currentimageslot else _("slot%s - %s, with backup")) % (x, imagedict[x]['imagename']), (x, "with backup")))
-		for x in range(1, SystemInfo["canMultiBoot"][1] + 1):
-			choices.append(((_("slot%s - %s (current image), without backup") if x == currentimageslot else _("slot%s - %s, without backup")) % (x, imagedict[x]['imagename']), (x, "without backup")))
-		choices.append((_("No, do not flash image"), False))
+			choices.append(((_("slot%s - %s (current image)") if x == currentimageslot else _("slot%s - %s")) % (x, imagedict[x]['imagename']), (x,True)))
+		choices.append((_("No, do not flash an image"), False))
 		self.session.openWithCallback(self.checkMedia, MessageBox, self.message, list=choices, default=currentimageslot, simple=True)
 
 	def checkMedia(self, retval):
 		if retval:
 			if SystemInfo["canMultiBoot"]:
 				self.multibootslot = retval[0]
-				doBackup = retval[1] == "with backup"
-			else:
-				doBackup = retval == "with backup"
 
 			def findmedia(path):
 				def avail(path):
@@ -356,7 +350,7 @@ class FlashImage(Screen):
 
 			if self.destination:
 
-				destination = os.path.join(self.destination, 'downloaded_images')
+				destination = os.path.join(self.destination, 'images')
 				self.zippedimage = "://" in self.source and os.path.join(destination, self.imagename) or self.source
 				self.unzippedimage = os.path.join(destination, '%s.unzipped' % self.imagename[:-4])
 
@@ -365,13 +359,10 @@ class FlashImage(Screen):
 						os.remove(destination)
 					if not os.path.isdir(destination):
 						os.mkdir(destination)
-					if doBackup:
-						if isDevice:
-							self.startBackupsettings(True)
-						else:
-							self.session.openWithCallback(self.startBackupsettings, MessageBox, _("Can only find a network drive to store the backup this means after the flash the autorestore will not work. Alternativaly you can mount the network drive after the flash and perform a manufacurer reset to autorestore"), simple=True)
+					if isDevice:
+						self.startBackupsettings(True)
 					else:
-						self.startDownload()
+						self.session.openWithCallback(self.startBackupsettings, MessageBox, _("Can only find a network drive to store the backup this means after the flash the autorestore will not work. Alternativaly you can mount the network drive after the flash and perform a manufacurer reset to autorestore"), simple=True)
 				except:
 					self.session.openWithCallback(self.abort, MessageBox, _("Unable to create the required directories on the media (e.g. USB stick or Harddisk) - Please verify media and try again!"), type=MessageBox.TYPE_ERROR, simple=True)
 			else:
@@ -389,16 +380,16 @@ class FlashImage(Screen):
 	def flashPostAction(self, retval = True):
 		if retval:
 			title =_("Please select what to do after flashing the image:\n(In addition, if it exists, a local script will be executed as well at /media/hdd/images/config/myrestore.sh)")
-			choices = ((_("Flash and start installation wizard"), "wizard"),
-			(_("Flash and restore settings and no plugins"), "restoresettingsnoplugin"),
-			(_("Flash and restore settings and selected plugins (ask user)"), "restoresettings"),
-			(_("Flash and restore settings and all saved plugins"), "restoresettingsandallplugins"),
+			choices = ((_("Upgrade (Backup, Flash & Restore All)"), "restoresettingsandallplugins"),
+			(_("Clean (Just flash and start clean)"), "wizard"),
+			(_("Backup, flash and restore settings and no plugins"), "restoresettingsnoplugin"),
+			(_("Backup, flash and restore settings and selected plugins (ask user)"), "restoresettings"),
 			(_("Do not flash image"), "abort"))
-			self.session.openWithCallback(self.postFlashActionCallback, ChoiceBox,title=title,list=choices,selection=self.SelectPrevPostFashAction())
+			self.session.openWithCallback(self.postFlashActionCallback, ChoiceBox,title=title,list=choices,selection=self.SelectPrevPostFlashAction())
 		else:
 			self.abort()
 
-	def SelectPrevPostFashAction(self):
+	def SelectPrevPostFlashAction(self):
 		index = 0
 		Settings = False
 		AllPlugins = False
@@ -409,12 +400,14 @@ class FlashImage(Screen):
 			AllPlugins = True
 		if os.path.exists('/media/hdd/images/config/noplugins'):
 			noPlugins = True
-		if 	Settings and noPlugins:
-			index = 1
-		elif Settings and not AllPlugins and not noPlugins:
+		if Settings and noPlugins:
 			index = 2
-		elif Settings and AllPlugins:
+		elif Settings and not AllPlugins and not noPlugins:
 			index = 3
+		elif Settings and AllPlugins:
+			index = 0
+		else:
+			index = 1
 		return index
 
 	def postFlashActionCallback(self, answer):
@@ -577,10 +570,12 @@ class FlashImage(Screen):
 				command = "/usr/bin/ofgwrite -r -k %s" % imagefiles
 			self.containerofgwrite = Console()
 			self.containerofgwrite.ePopen(command, self.FlashimageDone)
+			fbClass.getInstance().lock()
 		else:
 			self.session.openWithCallback(self.abort, MessageBox, _("Image to install is invalid\n%s") % self.imagename, type=MessageBox.TYPE_ERROR, simple=True)
 
 	def FlashimageDone(self, data, retval, extra_args):
+		fbClass.getInstance().unlock()
 		self.containerofgwrite = None
 		if retval == 0:
 			self["header"].setText(_("Flashing image successful"))
@@ -596,6 +591,7 @@ class FlashImage(Screen):
 		self.close()
 
 	def ok(self):
+		fbClass.getInstance().unlock()
 		if self["header"].text == _("Flashing image successful"):
 			self.close()
 		else:
