@@ -240,11 +240,11 @@ class OPDBootInstallation(Screen):
                                         if line.find(self.mysel):
                                                 mntdev = line.split(' ')[0]
                                 f.close()
-                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 os.system("mv /etc/fstab /etc/fstab1")
                                 os.system("grep -v  /media/opdboot /etc/fstab1 > /etc/fstab")
                                 os.system("rm /etc/fstab1")
-                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 fstabuuid = os.popen('blkid -s UUID -o value ' + mntdev).read()
                                 fstabuuidwrite = 'UUID=' + fstabuuid.strip() + '        /media/opdboot        auto        defaults	       1        1'
                                 fileHandle = open ('/etc/fstab', 'a')
@@ -261,10 +261,10 @@ class OPDBootInstallation(Screen):
                         out2 = open('/media/opdboot/OPDBootI/.opdboot', 'w')
                         out2.write('Flash')
                         out2.close()
-                        out = open('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
+                        out = open('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
                         out.write(self.mysel)
                         out.close()
-                        os.system('cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
+                        os.system('cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
                         image = getImageDistro()
                         if fileExists('/etc/image-version'):
                                 if 'build' not in image:
@@ -287,11 +287,11 @@ class OPDBootInstallation(Screen):
                                         if line.find(self.mysel):
                                                 mntdev = line.split(' ')[0]
                                 f.close()
-                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                mntid = os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 os.system("mv /etc/fstab /etc/fstab1")
                                 os.system("grep -v  /media/opdboot /etc/fstab1 > /etc/fstab")
                                 os.system("rm /etc/fstab1")
-                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
+                                os.system('blkid -s UUID -o value ' + mntdev + '>/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/install')
                                 fstabuuid = os.popen('blkid -s UUID -o value ' + mntdev).read()
                                 fstabuuidwrite = 'UUID=' + fstabuuid.strip() + '        /media/opdboot        auto        defaults	       1        1'
                                 fileHandle = open('/etc/fstab', 'a')
@@ -299,16 +299,16 @@ class OPDBootInstallation(Screen):
                                 fileHandle.close()
                         cmd = 'mkdir ' + self.mysel + 'OPDBootI;mkdir ' + self.mysel + 'OPDBootUpload'
                         os.system(cmd)
-                        os.system('cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit')
+                        os.system('cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit')
                         os.system('chmod 777 /sbin/opdinit;chmod 777 /sbin/init;ln -sfn /sbin/opdinit /sbin/init')
                         os.system('mv /etc/init.d/volatile-media.sh /etc/init.d/volatile-media.sh.back')
                         out2 = open('/media/opdboot/OPDBootI/.opdboot', 'w')
                         out2.write('Flash')
                         out2.close()
-                        out = open('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
+                        out = open('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'w')
                         out.write(self.mysel)
                         out.close()
-                        os.system('cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
+                        os.system('cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location /etc/opd/')
                         image = getImageDistro()
                         if fileExists('/etc/image-version'):
                                 if 'build' not in image:
@@ -382,11 +382,11 @@ class OPDBootImageChoose(Screen):
                                 cmd1 = 'chmod 777 /sbin/opdinit;chmod 777 /sbin/init;ln -sfn /sbin/opdinit /sbin/init'
                                 self.session.openWithCallback(self.close, Console, _('OPDBoot work with Bootmanager by Booting!'), [cmd0, cmd1])
                         if choice[1] == 'withoutopdboot':
-                                cmd0 = 'cp /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit'
+                                cmd0 = 'cp /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/bin/opdinitnoboot /sbin/opdinit'
                                 cmd1 = 'chmod 777 /sbin/opdinit;chmod 777 /sbin/init;ln -sfn /sbin/opdinit /sbin/init'
                                 self.session.openWithCallback(self.updateList, Console, _('OPDBoot work without Bootmanager by Booting!'), [cmd0, cmd1])
                         if choice[1] == 'bootmanagertimeout':
-                                self.session.openWithCallback(self.setupDone, Setup, 'bootmanagertimeout', '/usr/lib/enigma2/python/OPENDROID')
+                                self.session.openWithCallback(self.setupDone, Setup, 'bootmanagertimeout', '/usr/lib64/enigma2/python/OPENDROID')
                         return 
 
         def setupDone(self, test=None):
@@ -408,7 +408,7 @@ class OPDBootImageChoose(Screen):
         def updateList(self):
                 self.list = []
                 try:
-                        pluginpath = '/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot'
+                        pluginpath = '/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot'
                         f = open(pluginpath + '/.opdboot_location', 'r')
                         mypath = f.readline().strip()
                         f.close()
@@ -661,7 +661,7 @@ class OPDBootImageChoose(Screen):
                                 cmd5 = 'mv /etc/init.d/volatile-media.sh.back /etc/init.d/volatile-media.sh'
                                 cmd6 = 'rm /media/opdboot/OPDBootI/.opdboot'
                                 cmd7 = 'rm /media/opdboot/OPDBootI/.Flash'
-                                cmd8 = 'rm /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'
+                                cmd8 = 'rm /usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'
                                 cmd8a = "echo -e '\n\nOPDBoot remove complete....'"
                                 self.session.openWithCallback(self.close, Console, _('OPDBoot is removing...'), [cmd0, cmd1, cmd1a, cmd2, cmd3, cmd4, cmd4a, cmd5, cmd6, cmd7, cmd8, cmd8a])
                         if choice[1] == 'rmallimg':
@@ -749,7 +749,7 @@ class OPDBootImageInstall(Screen, ConfigListScreen):
 
         def imageInstall(self):
                 if self.check_free_space():
-                        pluginpath = '/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot'
+                        pluginpath = '/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot'
                         myerror = ''
                         source = self.source.value.replace(' ', '')
                         target = self.target.value.replace(' ', '')
@@ -815,7 +815,7 @@ def main(session, **kwargs):
         m = checkkernel()
         if m == 1:
                 try:
-                        f = open('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'r')
+                        f = open('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location', 'r')
                         mypath = f.readline().strip()
                         f.close()
                         if not fileExists('/media/opdboot'):
@@ -835,7 +835,7 @@ def main(session, **kwargs):
                 except:
                         pass
 
-                if fileExists('/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'):
+                if fileExists('/usr/lib64/enigma2/python/Plugins/Extensions/OPDBoot/.opdboot_location'):
                         if fileExists('/media/opdboot/OPDBootI/.opdboot'):
                                 session.open(OPDBootImageChoose)
                         else:

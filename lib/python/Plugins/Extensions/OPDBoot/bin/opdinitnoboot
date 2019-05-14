@@ -20,9 +20,9 @@ else
 
 	sleep 5
 	mnttest="nouuid"
-	if [ -e /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install  ]; then
+	if [ -e @libdir@/enigma2/python/Plugins/Extensions/OPDBoot/bin/install  ]; then
         	orgimag1=`mount | sed '/sd/!d' | cut -d" " -f1`
-		selectinstall=`cat /usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/install`
+		selectinstall=`cat @libdir@/enigma2/python/Plugins/Extensions/OPDBoot/bin/install`
 		for item in $orgimag1; do
 			selectmnt=`blkid | sed "/$selectinstall/!d" | cut -d":" -f1`
 			if [ $selectmnt == $item ]; then
@@ -100,7 +100,7 @@ else
 		  break;
 	fi
 
-	/usr/lib/enigma2/python/Plugins/Extensions/OPDBoot/bin/fbclear > /dev/null 2>&1
+	@libdir@/enigma2/python/Plugins/Extensions/OPDBoot/bin/fbclear > /dev/null 2>&1
 
 	TARGET=Flash
 	if [ -f /media/opdboot/OPDBootI/.opdboot ]; then

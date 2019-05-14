@@ -6,8 +6,8 @@ from boxbranding import getBoxType, getImageDistro, getMachineName, getMachineBr
 from os import path
 media_nf = '/media/opdboot'
 mediahome = media_nf + '/OPDBootI/'
+extensions_path = '/usr/lib64/enigma2/python/Plugins/Extensions/'
 
-extensions_path = '/usr/lib/enigma2/python/Plugins/Extensions/'
 extensions_path_extractpy = extensions_path + 'OPDBoot/ubi_reader/ubi_extract_files.py'
 extensions_path_extractpyo = extensions_path_extractpy + 'o'
 dev_null = ' > /dev/null 2>&1'
@@ -20,7 +20,6 @@ def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimag
 
         for command in list_one:
                 os.system(command)
-
         rc = OPDBootExtract(source, target, zipdelete, getimagefolder, getMachineRootFile, getImageArch)
 
         list_two = ['mkdir -p ' + media_opendroid_target + '/media' + dev_null,
@@ -34,7 +33,6 @@ def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimag
                     'rm -rf ' + media_opendroid_target + extensions_path + 'HbbTV',
                     'cp -r ' + extensions_path + 'OPDBoot/OPDBoot_client ' + media_opendroid_target + extensions_path + dev_null,
                     'cp -r ' + extensions_path + 'OPDBoot/.opdboot_location ' + media_opendroid_target + extensions_path + 'OPDBoot_client/.opdboot_location' + dev_null]
-
         for command in list_two:
                 os.system(command)
 
@@ -47,7 +45,7 @@ def OPDBootMainEx(source, target, installsettings, bootquest, zipdelete, getimag
 
         os.system('mkdir -p ' + media_opendroid_target + '/media/usb' + dev_null)
 
-        list_four = ['/etc/fstab', '/usr/lib/enigma2/python/Components/config.py', '/usr/lib/enigma2/python/Tools/HardwareInfoVu.py']
+        list_four = ['/etc/fstab', '/usr/lib64/enigma2/python/Components/config.py', '/usr/lib64/enigma2/python/Tools/HardwareInfoVu.py']
         for entrie in list_four:
                 filename = media_opendroid_target + entrie
                 tempfile = filename + '.tmp'
