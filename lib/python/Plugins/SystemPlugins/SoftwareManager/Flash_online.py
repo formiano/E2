@@ -20,7 +20,7 @@ import os, urllib2, shutil, math, time, zipfile, shutil
 
 from boxbranding import getImageDistro, getMachineBuild, getImageVersion
 
-feedurl = 'http://images.opendroid.org/%s' %(getImageVersion())
+feedurl = 'http://images.opendroid.org/%s' %(getImageDistro())
 imagecat = [6.7,6.8,6.9,7.0]
 
 def checkimagefiles(files):
