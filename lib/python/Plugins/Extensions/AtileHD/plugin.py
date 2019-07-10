@@ -30,6 +30,7 @@ from os import listdir, remove, rename, system, path, symlink, chdir, makedirs, 
 import shutil
 cur_skin = config.skin.primary_skin.value.replace('/skin.xml', '')
 
+# Atile
 config.plugins.AtileHD = ConfigSubsection()
 
 def Plugins(**kwargs):
@@ -327,6 +328,7 @@ class AtileHD_Config(Screen, ConfigListScreen):
 			return True
 		else:
 			return False
+
 
 	def setPicture(self, f):
 		pic = f.replace(".xml", ".png")
