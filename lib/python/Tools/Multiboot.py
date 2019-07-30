@@ -67,6 +67,10 @@ def GetBoxName():
 		box = 'maram9'
 	elif box.startswith('sf8008'):
 		box = "sf8008"
+	elif box.startswith('osmio4k'):
+		box = "osmio4k"
+	elif box.startswith('twinboxlcdci'):
+		box = "twinboxlcd"
 	return box
 
 class GetImagelist():
@@ -301,7 +305,6 @@ class EmptySlot():
 		else:
 			self.container.ePopen('mount /dev/%s /tmp/testmount' %self.part if self.phase == self.MOUNT else 'umount /tmp/testmount', self.appClosed)
 
-	
 	def appClosed(self, data, retval, extra_args):
 		if retval == 0 and self.phase == self.MOUNT:
 			if SystemInfo["HasRootSubdir"]:

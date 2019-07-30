@@ -102,7 +102,7 @@ class ServiceInfo(Converter, object):
 			return "N/A"
 		if v == -2:
 			return info.getInfoString(what)
-		return convert(v)    
+		return convert(v)
 
 	@cached
 	def getBoolean(self):

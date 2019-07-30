@@ -169,6 +169,12 @@ class ImageBackup(Screen):
 						self.MTDROOTFS = "%s" %(self.getImageList[self.SLOT]['part'])
 						if self.SLOT >= 2 and os.path.islink("/dev/block/by-name/userdata"):
 							self.MTDKERNEL = os.readlink("/dev/block/by-name/linuxkernel%s" %self.SLOT)[5:]
+					elif self.EMMCIMG == "usb_update.bin":
+						f = open('/sys/firmware/devicetree/base/chosen/bootargs', 'r').read()
+						if "sda" in f:
+							kern =  (self.SLOT-1)*2
+							self.MTDKERNEL = "sda%s" %(kern-1)
+							self.MTDROOTFS = "sda%s" %(kern)
 					else:
 						try:
 							self.MTDROOTFS = os.readlink("/dev/block/by-name/rootfs%s" %self.SLOT)[5:]
@@ -610,8 +616,8 @@ class ImageBackup(Screen):
 
 	def imageInfo(self):
 		AboutText = _("Full Image Backup ")
-		AboutText += _("By opendroid Image Team") + "\n"
-		AboutText += _("Support at") + " www.droidsat.org\n\n"
+		AboutText += _("By OpenDroid Image Team") + "\n"
+		AboutText += _("Support at") + " https://droidsat.org/forum/\n\n"
 		AboutText += _("[Image Info]\n")
 		AboutText += _("Model: %s %s\n") % (getMachineBrand(), getMachineName())
 		AboutText += _("Backup Date: %s\n") % strftime("%Y-%m-%d", localtime(self.START))

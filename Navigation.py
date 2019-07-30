@@ -37,6 +37,8 @@ class Navigation:
 		self.currentlyPlayingService = None
 
 		Screens.Standby.TVstate()
+		self.skipWakeup = False
+		self.skipTVWakeup = False
 		self.RecordTimer = None
 		self.isRecordTimerImageStandard = False
 		for p in plugins.getPlugins(PluginDescriptor.WHERE_RECORDTIMER):
@@ -117,6 +119,7 @@ class Navigation:
 
 		if hasFakeTime and self.wakeuptime > 0: # check for NTP-time sync, if no sync, wait for transponder time
 			if Screens.Standby.TVinStandby.getTVstandby('waitfortimesync') and not wasTimerWakeup:
+				self.skipTVWakeup = True
 				Screens.Standby.TVinStandby.setTVstate('power')
 			self.savedOldTime = now
 			self.timesynctimer = eTimer()
@@ -200,7 +203,7 @@ class Navigation:
 			self.getstandby = 0
 
 		#workaround for normal operation if no time sync after e2 start - box is in standby
-		if self.getstandby != 1:
+		if self.getstandby != 1 and not self.skipWakeup:
 			self.gotopower()
 
 	def wasTimerWakeup(self):
@@ -230,7 +233,7 @@ class Navigation:
 		self.wakeupCheck()
 
 	def gotopower(self):
-		if not Screens.Standby.TVinStandby.getTVstate('on'):
+		if not self.skipTVWakeup:
 			Screens.Standby.TVinStandby.setTVstate('power')
 		if Screens.Standby.inStandby:
 			print '[NAVIGATION] now entering normal operation'

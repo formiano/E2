@@ -9,8 +9,7 @@ install_PYTHON =	\
 	ImageWizard.py \
 	SoftwareTools.py \
 	ImageBackup.py \
-	Flash_online.py \
-	Multibootmgr.py
+	Flash_online.py
 
 dist_install_DATA = \
 	imagewizard.xml \

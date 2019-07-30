@@ -51,10 +51,6 @@ import ServiceReference
 import time
 import datetime
 inOPD_panel = None
-config.softcam = ConfigSubsection()
-config.softcam.actCam = ConfigText(visible_width=200)
-config.softcam.actCam2 = ConfigText(visible_width=200)
-config.softcam.waittime = ConfigSelection([('0',_("dont wait")),('1',_("1 second")), ('5',_("5 seconds")),('10',_("10 seconds")),('15',_("15 seconds")),('20',_("20 seconds")),('30',_("30 seconds"))], default='15')
 
 if os.path.isfile('/usr/lib/enigma2/python/Plugins/Extensions/MultiQuickButton/plugin.pyo') is True:
 	try:
@@ -73,56 +69,51 @@ from Plugins.SystemPlugins.SoftwareManager.BackupRestore import BackupScreen, Re
 import gettext
 
 choicelist = [('0',_("Audio Selection")),('1',_("Default (Timeshift)")), ('2',_("Toggle Pillarbox <> Pan&Scan")),('3',_("Teletext"))]
-config.OPENDROID_yellowkey = ConfigSubsection()
-config.OPENDROID_yellowkey.list = ConfigSelection(default='1', choices = choicelist)
-config.OPENDROID_yellowkey.listLong = ConfigSelection(default='1', choices = choicelist)
+config.yellowkey = ConfigSubsection()
+config.yellowkey.list = ConfigSelection(default='1', choices = choicelist)
+config.yellowkey.listLong = ConfigSelection(default='1', choices = choicelist)
 
-config.OPENDROID_yellowkey.list = ConfigSelection(default='0', choices = choicelist)
-config.OPENDROID_yellowkey.listLong = ConfigSelection(default='0', choices = choicelist)
-
+config.yellowkey.list = ConfigSelection(default='0', choices = choicelist)
+config.yellowkey.listLong = ConfigSelection(default='0', choices = choicelist)
 SystemInfo["SoftCam"] = Check_Softcam()
-
-config.softcam = ConfigSubsection()
-config.softcam.actCam = ConfigText(visible_width = 200)
-config.softcam.actCam2 = ConfigText(visible_width = 200)
-config.softcam.waittime = ConfigSelection([('0',_("dont wait")),('1',_("1 second")), ('5',_("5 seconds")),('10',_("10 seconds")),('15',_("15 seconds")),('20',_("20 seconds")),('30',_("30 seconds"))], default='15')
-config.OPENDROID_BluePanel = ConfigSubsection()
 
 def Check_Softcam():
 	found = False
 	if fileExists("/etc/enigma2/noemu"):
 		found = False
 	else:
-		for x in os.listdir('/etc'):
-			if x.find('.emu') > -1:
+		for cam in os.listdir("/etc/init.d"):
+			if cam.startswith('softcam.') and not cam.endswith('None'):
 				found = True
-				break;
+				break
+			elif cam.startswith('cardserver.') and not cam.endswith('None'):
+				found = True
+				break
 	return found
 
 def Check_SysSoftcam():
+	syscam="none"
 	if os.path.isfile('/etc/init.d/softcam'):
 		if (os.path.islink('/etc/init.d/softcam') and not os.readlink('/etc/init.d/softcam').lower().endswith('none')):
 			try:
-				syscam = None
 				syscam = os.readlink('/etc/init.d/softcam').rsplit('.', 1)[1]
 				if syscam.lower().startswith('oscam'):
-					return "oscam"
+					syscam="oscam"
+				if syscam.lower().startswith('ncam'):
+					syscam="ncam"
+				if syscam.lower().startswith('cccam'):
+					syscam="cccam"
 			except:
 				pass
-		if pathExists('/usr/bin/'):
-			softcams = os.listdir('/usr/bin/')
-			for softcam in softcams:
-				if softcam.lower().startswith('oscam'):
-					return "oscam"
-	return None
+	return syscam
 
 
-def _(txt):
-	t = gettext.dgettext("OPD_panel", txt)
-	if t == txt:
-		print "[OPD_panel] fallback to default translation for", txt
-		t = gettext.gettext(txt)
-	return t
+if Check_Softcam():
+	redSelection = [('0',_("Default (Instant Record)")), ('1',_("Timer List")),('2',_("Show Movies")), ('3',_("SoftcamSetup"))]
+else:
+	redSelection = [('0',_("Default (Instant Record)")), ('1',_("Timer List")),('2',_("Show Movies"))]
+
+SystemInfo["SoftCam"] = Check_Softcam()
 def command(comandline, strip=1):
   comandline = comandline + " >/tmp/command.txt"
   os.system(comandline)
@@ -268,8 +259,11 @@ class OPD_panel(Screen, InfoBarPiP):
 			self.Mlist.append(MenuEntryItem((InfoEntryComponent('SoftcamSetup'), _("Softcam-Setup"), 'SoftcamSetup')))
 		if Check_SysSoftcam() is "oscam":
 			self.Mlist.append(MenuEntryItem((InfoEntryComponent('OScamInfo'), _("OScamInfo"), 'OScamInfo')))
+		if Check_SysSoftcam() is "ncam":
+			self.Mlist.append(MenuEntryItem((InfoEntryComponent('OScamInfo'), _("NcamInfo"), 'OScamInfo')))
 		self.Mlist.append(MenuEntryItem((InfoEntryComponent('ImageFlash'), _('Image-Flasher'), 'ImageFlash')))
 		self.Mlist.append(MenuEntryItem((InfoEntryComponent('opdBootLogoSelector'), _('opdBootLogo-Setup'), 'opdBootLogoSelector')))
+                self.Mlist.append(MenuEntryItem((InfoEntryComponent('ClearMem'), _('ClearMem-Setup'), 'ClearMem')))
 		self.Mlist.append(MenuEntryItem((InfoEntryComponent('LogManager'), _('Log-Manager'), 'LogManager')))
 		self.Mlist.append(MenuEntryItem((InfoEntryComponent('SoftwareManager'), _('Software-Manager'), 'software-manager')))
 		self.Mlist.append(MenuEntryItem((InfoEntryComponent('services'), _('services'), 'services')))
@@ -388,7 +382,7 @@ class OPD_panel(Screen, InfoBarPiP):
 		elif menu == "CronTimer":
 			self.session.open(CronTimers)
 		elif menu == "SoftcamSetup":
-			self.session.open(SoftcamSetup)
+			self.session.open(BluePanel)
 		elif menu == "Infobar_Setup":
 			from OPENDROID.GreenPanel import InfoBarSetup
 			self.session.open(InfoBarSetup)
@@ -398,6 +392,9 @@ class OPD_panel(Screen, InfoBarPiP):
 		elif menu == "opdBootLogoSelector":
 			from OPENDROID.OPD_Bootlogo import opdBootLogoSelector
 			self.session.open(opdBootLogoSelector)
+                elif menu == "ClearMem":
+			from OPENDROID.ClearMem import ClearMem
+			self.session.open(ClearMem)
 		elif menu == "JobManager":
 			self.session.open(ScriptRunner)
 		elif menu == "software-manager":

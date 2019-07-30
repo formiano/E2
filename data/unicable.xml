@@ -147,6 +147,9 @@ unicable (version)
 		<manufacturer name="Schwaiger">
 			<product name="SPS6941 531" scr1="1210" scr2="1420" scr3="1680" scr4="2040"/>
 		</manufacturer>
+        <manufacturer name="TechniSat">
+            <product name="SCR-LNB" scr1="1210" scr2="1420" scr3="1680" scr4="2040"/>
+        </manufacturer>
 		<manufacturer name="Telestar">
 			<product name="Skywire HC LNB" scr1="1210" scr2="1420" scr3="1680" scr4="2040"/>
 		</manufacturer>
