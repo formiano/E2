@@ -234,7 +234,8 @@ class FlashImage(Screen):
 		self.downloader = None
 		self.source = source
 		self.imagename = imagename
-
+		self["key_red"] = Label(_("Cancel"))
+		self["key_green"] = Label(_("ok"))
 		self["header"] = Label(_("Backup settings"))
 		self["info"] = Label(_("Save settings and EPG data"))
 		self["summary_header"] = StaticText(self["header"].getText())
@@ -472,7 +473,7 @@ class FlashImage(Screen):
 		if reply:
 			if "://" in self.source:
 				from Tools.Downloader import downloadWithProgress
-				self["header"].setText(_("Downloading Image"))
+				self["header"].setText(_("Downloading Image please wait"))
 				self["info"].setText(self.imagename)
 				self["summary_header"].setText(self["header"].getText())
 				self.downloader = downloadWithProgress(self.source, self.zippedimage)
