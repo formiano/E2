@@ -22,7 +22,7 @@ def getButtonSetupKeys():
 		(_("Green"), "green", "Module/OPENDROID.GreenPanel/GreenPanel"),
 		(_("Green long"), "green_long", "Infobar/showAutoTimerList"),
 		(_("Yellow"), "yellow", "Infobar/showExtensionSelection"),
-		(_("Yellow long"), "yellow_long", "Plugins/Extensions/IMDb/1"),
+		(_("Yellow long"), "yellow_long", ""),
 		(_("Blue"), "blue", "Module/OPENDROID.BluePanel/BluePanel"),
 		(_("Blue long"), "blue_long", ""),
 		(_("Info (EPG)"), "info", "Infobar/InfoPressed/1"),
@@ -47,6 +47,7 @@ def getButtonSetupKeys():
 		(_("Rec long"), "rec_long", ""),
 		(_("Teletext"), "text", ""),
 		(_("Subtitle"), "subtitle", ""),
+		(_("Subtitle long"), "subtitle_long", ""),
 		(_("Menu"), "mainMenu", ""),
 		(_("List/Fav"), "list", ""),
 		(_("List/Fav long"), "list_long", ""),
@@ -182,8 +183,8 @@ def getButtonSetupFunctions():
 	ButtonSetupFunctions.append((_("Show event details"), "Infobar/openEventView", "EPG"))
 	ButtonSetupFunctions.append((_("Show EPG for current service"), "Infobar/openSingleServiceEPG", "EPG"))
 	ButtonSetupFunctions.append((_("Show multi EPG"), "Infobar/openMultiServiceEPG", "EPG"))
-	ButtonSetupFunctions.append((_("Show select audio track"), "Infobar/audioSelection", "InfoBar"))
 	ButtonSetupFunctions.append((_("Show subtitle selection"), "Infobar/subtitleSelection", "InfoBar"))
+	ButtonSetupFunctions.append((_("Show Audioselection"), "Infobar/audioSelection", "InfoBar"))
 	ButtonSetupFunctions.append((_("Switch to radio mode"), "Infobar/showRadio", "InfoBar"))
 	ButtonSetupFunctions.append((_("Switch to TV mode"), "Infobar/showTv", "InfoBar"))
 	ButtonSetupFunctions.append((_("Instant record"), "Infobar/instantRecord", "InfoBar"))

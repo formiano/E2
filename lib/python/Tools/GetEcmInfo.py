@@ -61,7 +61,7 @@ class GetEcmInfo:
 			if using:
 				# CCcam
 				if using == 'fta':
-					self.textvalue = _("FTA")
+					self.textvalue = _("Free To Air")
 				elif using == 'emu':
 					self.textvalue = "EMU (%ss)" % (info.get('ecm time', '?'))
 				else:
@@ -140,4 +140,3 @@ class GetEcmInfo:
 			provid='0'
 			ecmpid='0'
 		return self.textvalue,decCI,provid,ecmpid
-
