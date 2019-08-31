@@ -24,7 +24,7 @@ feedurl = 'http://images.opendroid.org/6.8'
 imagecat = [6.8]
 
 def checkimagefiles(files):
-	return len([x for x in files if 'kernel' in x and '.bin' in x or x in ('zImage', 'uImage', 'root_cfe_auto.bin', 'root_cfe_auto.jffs2', 'oe_kernel.bin', 'oe_rootfs.bin', 'e2jffs2.img', 'rootfs.tar.bz2', 'rootfs.ubi','rootfs.bin')]) == 2
+	return len([x for x in files if 'kernel' in x and '.bin' in x or x in ('zImage', 'uImage', 'root_cfe_auto.bin', 'root_cfe_auto.jffs2', 'oe_kernel.bin', 'oe_rootfs.bin', 'e2jffs2.img', 'rootfs.tar.bz2', 'rootfs.ubi','rootfs.bin')]) >= 2
 
 class FlashOnline(Screen):
 	skin = """
@@ -350,6 +350,7 @@ class FlashImage(Screen):
 
 	def flashPostAction(self, retval = True):
 		if retval:
+			self.recordcheck = False
 			title =_("Please select what to do after flashing the image:\n(In addition, if it exists, a local script will be executed as well at /media/hdd/images/config/myrestore.sh)")
 			choices = ((_("Upgrade (Backup, Flash & Restore All)"), "restoresettingsandallplugins"),
 			(_("Clean (Just flash and start clean)"), "wizard"),
@@ -383,11 +384,25 @@ class FlashImage(Screen):
 			index = 1
 		return index
 
+	def recordWarning(self, answer):
+		if answer:
+			self.postFlashActionCallback(self.answer)
+		else:
+			self.abort()
+
 	def postFlashActionCallback(self, answer):
 		restoreSettings   = False
 		restoreAllPlugins = False
 		restoreSettingsnoPlugin = False
 		if answer is not None:
+			if answer[1] != "abort" and not self.recordcheck:
+				self.recordcheck = True
+				rec = self.session.nav.RecordTimer.isRecording()
+				next_rec_time = self.session.nav.RecordTimer.getNextRecordingTime()
+				if rec or (next_rec_time > 0 and (next_rec_time - time.time()) < 360):
+					self.answer = answer
+					self.session.openWithCallback(self.recordWarning, MessageBox, _("Recording(s) are in progress or coming up in few seconds!") + '\n' + _("Really reflash your %s %s and reboot now?") % (getMachineBrand(), getMachineName()), default=False)
+					return
 			if answer[1] == "restoresettings":
 				restoreSettings   = True
 			if answer[1] == "restoresettingsnoplugin":

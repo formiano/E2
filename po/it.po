@@ -4375,7 +4375,7 @@ msgstr "Configura il server dei nomi (DNS)."
 msgid "Configure the netmask."
 msgstr "Opzione per impostare la netmask."
 
-msgid "Configure the number of days after which items are automaticaly removed from the trash can."
+msgid "Configure the number of days after which items are automatically removed from the trash can."
 msgstr "Configurare il numero di giorni per rimuovere i file dal cestino."
 
 msgid ""
@@ -4891,7 +4891,7 @@ msgstr "Ritardo prima dell'avvio del tasto inizio:"
 msgid "Delay for external subtitles"
 msgstr "Ritardo per sottotitoli esterni"
 
-msgid "Delay in miliseconds before start of scrolling text on display."
+msgid "Delay in milliseconds before start of scrolling text on display."
 msgstr "Ritardo in millisecondi prima dell'avvio del testo scorrevole sul display."
 
 msgid "Channel zap delay mode"
@@ -4903,7 +4903,7 @@ msgstr "Ritardo altro pulsante al cabio canale"
 msgid "Channel zap delay first button"
 msgstr "Ritardo pulsante al cambio canale"
 
-msgid "Delay in miliseconds after finish scrolling text on display."
+msgid "Delay in milliseconds after finish scrolling text on display."
 msgstr "Ritardo in millisecondi dopo aver terminato lo scorrimento del testo sul display."
 
 msgid "Delay:"
@@ -6205,7 +6205,7 @@ msgstr "Fulscreen"
 msgid "Full screen"
 msgstr "A schermo intero"
 
-msgid "Fulview resulution"
+msgid "Fulview Resolution"
 msgstr "Risoluzione a tutto schermo"
 
 msgid "Automatic resolution"
@@ -10153,7 +10153,7 @@ msgstr "Mostra Vero/Falso come opzione grafica"
 msgid "Show HDMI-Output Res"
 msgstr "Mostra ris. Uscita HDMI"
 
-msgid "Show HDMI Output Resulution"
+msgid "Show HDMI Output Resolution"
 msgstr "Mostra risoluzione di uscita HDMI"
 
 msgid "Select excluded backup files"
@@ -11371,7 +11371,7 @@ msgstr "Mostra stato nella barra delle informazioni PVR Movie Player"
 msgid "Show preview of current mode (*)."
 msgstr "Mostra l'anteprima della modalità corrente (*)."
 
-msgid "This option moves the PVR status from the seprate window into the MoviePlayer infobar."
+msgid "This option moves the PVR status from the separate window into the MoviePlayer infobar."
 msgstr ""
 "Questa opzione consente di spostare lo stato PVR dalla finestra separa nell'infrarotaggio MoviePlayer."
 
@@ -12272,7 +12272,7 @@ msgstr "Fermare timeshift"
 msgid "Stop timeshift while recording?"
 msgstr "Fermare timeshift durante la registrazione?"
 
-msgid "Stop's timeshift being used if a recording is in progress. (adviseable for usb sticks)"
+msgid "Stop's timeshift being used if a recording is in progress. (advisable for usb sticks)"
 msgstr ""
 "Smettere di utilizzare il Timeshift se la registrazione è in corso. (adviseable per chiavette USB)"
 
@@ -14864,12 +14864,8 @@ msgstr ""
 msgid "When enabled the PiP can be closed by the EXIT button."
 msgstr "Quando abilitato il PiP può essere chiuso dal pulsante EXIT."
 
-msgid ""
-"When enabled, the lenght of each recording will be shown in the movielist (this might cause some "
-"additional loading time)."
-msgstr ""
-"Quando è abilitata, la durata di ogni registrazione verrà mostrato nella movielist (questo potrebbe "
-"causare qualche tempo di ricarica)."
+msgid "When enabled, the length of each recording will be shown in the movielist (this might cause some additional loading time)."
+msgstr "Se abilitato, la lunghezza di ciascuna registrazione verrà mostrata nella lista dei film (questo potrebbe causare un tempo di caricamento aggiuntivo)."
 
 msgid "When enabled the original line breaks will be removed from the teletext subtitles."
 msgstr ""
@@ -20033,3 +20029,12 @@ msgstr ""
 
 msgid "Select Yellow Key Action long"
 msgstr "Azione tasto giallo pressione lunga"
+
+msgid "Set the time to wait for execute the default action in shutdown, standby or restart messages. (e.g. used in Timer, PowerTimer, Sleeptimer, ...)"
+msgstr "Impostare il tempo di attesa per eseguire l'azione predefinita nei messaggi di arresto, standby o riavvio. (e.g. utilizzato nel timer, PowerTimer, Sleeptimer, ...)"
+
+msgid "Time delay of the shutdown messages"
+msgstr "Ritardo dei messaggi di spegnimento"
+
+msgid "Note Release"
+msgstr "Nota Rilascio"

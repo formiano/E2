@@ -9,19 +9,19 @@ from Components.AVSwitch import AVSwitch
 from Components.config import config, configfile, ConfigYesNo, ConfigSubsection, getConfigListEntry, ConfigSelection, ConfigNumber, ConfigText, ConfigInteger
 from Components.ConfigList import ConfigListScreen
 from Components.Label import Label
+from Components.Sources.StaticText import StaticText
 from Components.Language import language
 from Components.Pixmap import Pixmap
 #from skin import parseColor
 from enigma import ePicLoad
 import gettext, base64, os, time, glob, urllib2
-from os import environ, listdir, remove, rename, system, popen
+from os import environ, listdir, remove, rename, system, popen, mkdir
 from Tools.Directories import fileExists, resolveFilename, SCOPE_LANGUAGE, SCOPE_PLUGINS
-from boxbranding import *
-from OPENDROID.BluePanel import BluePanel
+from boxbranding import getBoxType, getImageDistro, getMachineName, getMachineBrand, getImageVersion, getMachineBuild, getImageArch
 from datetime import datetime
 plugin='[OscamSmartcard] '
+dev_null = ' > /dev/null 2>&1'
 null =' >/dev/null 2>&1'
-
 def architectures():
 	hardwaretype = popen('uname -m').read().strip()
 	hostname = popen('uname -n').read().strip()
@@ -197,7 +197,18 @@ class OscamSmartcard(ConfigListScreen, Screen):
 						zz += title + "-" +desc
 						i = i + 1
 					ConfigListScreen.__init__(self, list)
-					self["actions"] = ActionMap(["OkCancelActions","DirectionActions", "InputActions", "ColorActions", "SetupActions"], {"left": self.keyLeft,"down": self.keyDown,"up": self.keyUp,"right": self.keyRight,"red": self.exit,"yellow": self.showNews,"blue": self.exit,"green": self.systemcleaning,"cancel": self.exit}, -1)
+					self["actions"] = ActionMap(["OkCancelActions","DirectionActions", "InputActions", "ColorActions", "SetupActions"], 
+                                        {
+                                                "left": self.keyLeft,
+                                                "down": self.keyDown,
+                                                "up": self.keyUp,
+                                                "right": self.keyRight,
+                                                "red": self.exit,
+                                                "yellow": self.showNews,
+                                                "blue": self.exit,
+                                                "green": self.systemcleaning,
+                                                "cancel": self.exit,
+                                        }, -1)
 					self.onLayoutFinish.append(self.UpdatePicture)
 					if not self.selectionChanged in self["config"].onSelectionChanged:
 						self["config"].onSelectionChanged.append(self.selectionChanged)
@@ -241,8 +252,22 @@ class OscamSmartcard(ConfigListScreen, Screen):
 					list.append(getConfigListEntry(_("Oscam binary install"),config.OscamSmartcard.oscambinary,('INFORMATION:    ' + _("Versions Info") + '\n' +  _("installed")  + ' \t: ' + self.installedversion + '\n' + _("online") + '\t: ' + onlineavaible )))
 					list.append(getConfigListEntry(_("Is a Ci+ Module installed:"), config.OscamSmartcard.hasciplus, _("INFORMATION: please select your CI+ Modul\n\n")))
 					ConfigListScreen.__init__(self, list)
-					self["actions"] = ActionMap(["OkCancelActions", "DirectionActions", "InputActions", "ColorActions"], {"left": self.keyLeft,"down": self.keyDown,"up": self.keyUp,"right": self.keyRight,"red": self.exit,"yellow": self.showNews, "blue": self.rmconfig, "green": self.save,"cancel": self.exit}, -1)
+					self["actions"] = ActionMap(["OkCancelActions", "DirectionActions", "InputActions", "ColorActions"], 
+                                        {       "left": self.keyLeft,
+                                                "down": self.keyDown,
+                                                "up": self.keyUp,
+                                                "right": self.keyRight,
+                                                "red": self.exit,
+                                                "yellow": self.showNews, 
+                                                "blue": self.rmconfig, 
+                                                "green": self.save,
+                                                "cancel": self.exit,
+                                        }, -1)
 					self.onLayoutFinish.append(self.UpdatePicture)
+                            		self["key_red"] = StaticText(_("Close"))
+		                        self["key_green"] = StaticText(_("save"))
+		                        self["key_blue"] = StaticText(_("remove current config"))
+                                        self["key_yellow"] = StaticText(_("Note Release"))
 					if not self.selectionChanged in self["config"].onSelectionChanged:
 						self["config"].onSelectionChanged.append(self.selectionChanged)
 					self.selectionChanged()
@@ -358,7 +383,7 @@ class OscamSmartcard(ConfigListScreen, Screen):
 		self.oscamdvbapiTMP = (self.oscamdvbapi + ".tmp")
 		self.oscamservices = (self.oscamconfigpath + "oscam.services")
 		self.oscamservicesTMP = (self.oscamservices + ".tmp")
-		self.oscamcamstart = '/etc/init.d/softcam start'
+		self.oscamcamstart = '/etc/oscamsmartcard.emu'
 		self.oscamcamstartTMP = (self.oscamcamstart + ".tmp")
 		for x in self["config"].list:
 			if len(x) > 1:
@@ -366,7 +391,7 @@ class OscamSmartcard(ConfigListScreen, Screen):
 			else:
 				pass
 		try:
-			system('mkdir ' + config.OscamSmartcard.ConfigPath.value + ' > /dev/null 2>&1')
+			os.system('mkdir -p ' + config.OscamSmartcard.ConfigPath.value + '/etc/tuxbox/config/oscam-smartcard' + dev_null)
 		except:
 			pass
 		self.makebackup()
@@ -401,7 +426,6 @@ class OscamSmartcard(ConfigListScreen, Screen):
 			return str(current)
 		else:
 			self.getcurrent()
-
 	def createoscamsmartcarddata(self):
 		data = 'wget -T5 --no-check-certificate -O /tmp/data.zip '+ base64.b64decode(self.getdl()[1]) + 'data.zip ' + null
 		popen(data)
@@ -873,7 +897,12 @@ class OscamSmartcard(ConfigListScreen, Screen):
 	def showNews(self):
 		lastinfo =  ""
 		x = " : "
-		lastinfo += "10-20-2018" + x + _("added bcm arm 64 bit CPU") + "\n"
+                lastinfo += "06-07-2019" + x + _("Adjust runlevels") + "\n"
+                lastinfo += "06-06-2019" + x + _("small changes due to disablecrccws") + "\n"
+                lastinfo += "02-06-2019" + x + _("Adjust config dir on install") + "\n"
+                lastinfo += "02-06-2019" + x + _("Adjust for sfeed and cleanup") + "\n"
+                lastinfo += "02-06-2019" + x + _("Fix softcam/cardserver start") + "\n"
+		lastinfo += "10-02-2018" + x + _("added bcm arm 64 bit CPU") + "\n"
 		lastinfo += "11-07-2018" + x + _("download fix") + "\n"
 		lastinfo += "18-02-2018" + x + _("added HD03/04 Support") + "\n"
 		lastinfo += "27-01-2018" + x + _("added ORF 650, added 6.2 Support") + "\n"
@@ -885,19 +914,9 @@ class OscamSmartcard(ConfigListScreen, Screen):
 		lastinfo += "08-09-2016" + x + _("this info added") + "\n"
 		lastinfo += "17-06-2016" + x + _("added SRG V6 Card") + "\n"
 		lastinfo += "09-06-2016" + x + _("added CI+") + "\n"
-		self.session.open(MessageBox, lastinfo, MessageBox.TYPE_INFO).setTitle("Oscamsmartcard News")
+		self.session.open(MessageBox, lastinfo, MessageBox.TYPE_INFO).setTitle(_("Oscamsmartcard News"))
 
 def main(session, **kwargs):
 	session.open(OscamSmartcard,"/usr/lib/enigma2/python/OPENDROID/icons/oscamsmartcard.png")
-
-def main_menu(menuid, **kwargs):
-	if menuid == "cam":
-		return [("Oscam Smartcard v2.5", main, _("Configuration tool for OScam"), 2)]
-	else:
-		return []
-
-def Plugins(**kwargs):
-	if getImageDistro() in ("opendroid"):
-		return PluginDescriptor(name="Oscam Smartcard v2.5", description=_("Configuration tool for OScam"), where = PluginDescriptor.WHERE_MENU, fnc=main_menu)
-	else:
-		return PluginDescriptor(name="Oscam Smartcard v2.5", description=_("Configuration tool for OScam"), where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main)
+def OPENDROID(**kwargs):
+	return PluginDescriptor(name="Oscam Smartcard v2.4", description=_("Configuration tool for OScam"), where = PluginDescriptor.WHERE_PLUGINMENU, icon="plugin.png", fnc=main)

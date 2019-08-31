@@ -59,7 +59,7 @@ def InitUsageConfig():
 	config.usage.boot_action = ConfigSelection(default = "normal", choices = [("normal", _("just boot")), ("standby", _("goto standby"))])
 	config.usage.showdish = ConfigSelection(default = "flashing", choices = [("flashing", _("Flashing")), ("normal", _("Not Flashing")), ("off", _("Off"))])
 	config.usage.multibouquet = ConfigYesNo(default = True)
-	config.usage.maxchannelnumlen = ConfigSelection(default = "4", choices = [("4", _("4")), ("5", _("5"))])
+	config.usage.maxchannelnumlen = ConfigSelection(default = "4", choices = [("1", _("1")), ("2", _("2")),("3", _("3")), ("4", _("4")), ("5", _("5"))])
 	config.usage.numzaptimeoutmode = ConfigSelection(default = "standard", choices = [("standard", _("Standard")), ("userdefined", _("User defined")), ("off", _("off"))])
 	config.usage.numzaptimeout1 = ConfigSlider(default = 3000, increment = 250, limits = (750, 5000))
 	config.usage.numzaptimeout2 = ConfigSlider(default = 1000, increment = 250, limits = (750, 5000))
@@ -119,6 +119,11 @@ def InitUsageConfig():
 
 	config.usage.volume_step_slow = ConfigSelectionNumber(default = 1, stepwidth = 1, min = 1, max = 10, wraparound = False)
 	config.usage.volume_step_fast = ConfigSelectionNumber(default = 3, stepwidth = 1, min = 1, max = 10, wraparound = False)
+
+	choicelist = []
+	for i in range(10, 310,10):
+		choicelist.append(("%d" % i, "%d " % i  + _("seconds")))
+	config.usage.shutdown_msgbox_timeout = ConfigSelection(default = "180", choices = choicelist)
 
 	choicelist = []
 	for i in range(1, 21):
@@ -942,7 +947,7 @@ def InitUsageConfig():
 		eEPGCache.getInstance().setEpgmaxdays(config.epg.maxdays.getValue())
 	config.epg.maxdays.addNotifier(EpgmaxdaysChanged)
 
-	config.epg.histminutes = ConfigSelectionNumber(min = 0, max = 120, stepwidth = 15, default = 0, wraparound = True)
+	config.epg.histminutes = ConfigSelectionNumber(min = 0, max = 1440, stepwidth = 30, default = 0, wraparound = True)
 	def EpgHistorySecondsChanged(configElement):
 		eEPGCache.getInstance().setEpgHistorySeconds(config.epg.histminutes.value*60)
 	config.epg.histminutes.addNotifier(EpgHistorySecondsChanged)
@@ -1199,7 +1204,23 @@ def InitUsageConfig():
 	config.subtitles.subtitle_rewrap = ConfigYesNo(default = False)
 	config.subtitles.colourise_dialogs = ConfigYesNo(default = False)
 	config.subtitles.subtitle_borderwidth = ConfigSelection(choices = ["1", "2", "3", "4", "5"], default = "3")
-	config.subtitles.subtitle_fontsize  = ConfigSelection(choices = ["%d" % x for x in range(16,101) if not x % 2], default = "38")
+	config.subtitles.subtitle_fontsize  = ConfigSelection(choices = ["%d" % x for x in range(16,101) if not x % 2], default = "40")
+	backtrans = [
+		("0", _("No transparency")),
+		("12", "5%"),
+		("25", "10%"),
+		("38", "15%"),
+		("50", "20%"),
+		("75", "30%"),
+		("100", "40%"),
+		("125", "50%"),
+		("150", "60%"),
+		("175", "70%"),
+		("200", "80%"),
+		("225", "90%"),
+		("255", _("Full transparency"))]
+	config.subtitles.subtitles_backtrans = ConfigSelection(default = "255", choices = backtrans)
+	config.subtitles.dvb_subtitles_backtrans = ConfigSelection(default = "0", choices = backtrans)
 
 	subtitle_delay_choicelist = []
 	for i in range(-54000000, 54045000, 45000):
@@ -1213,18 +1234,6 @@ def InitUsageConfig():
 	config.subtitles.dvb_subtitles_original_position = ConfigSelection(default = "0", choices = [("0", _("Original")), ("1", _("Fixed")), ("2", _("Relative"))])
 	config.subtitles.dvb_subtitles_centered = ConfigYesNo(default = False)
 	config.subtitles.subtitle_bad_timing_delay = ConfigSelection(default = "0", choices = subtitle_delay_choicelist)
-	config.subtitles.dvb_subtitles_backtrans = ConfigSelection(default = "0", choices = [
-		("0", _("No transparency")),
-		("25", "10%"),
-		("50", "20%"),
-		("75", "30%"),
-		("100", "40%"),
-		("125", "50%"),
-		("150", "60%"),
-		("175", "70%"),
-		("200", "80%"),
-		("225", "90%"),
-		("255", _("Full transparency"))])
 	config.subtitles.pango_subtitle_colors = ConfigSelection(default = "1", choices = [
 		("0", _("alternative")),
 		("1", _("white")),
