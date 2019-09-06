@@ -391,7 +391,7 @@ class OscamSmartcard(ConfigListScreen, Screen):
 			else:
 				pass
 		try:
-			os.system('mkdir -p ' + config.OscamSmartcard.ConfigPath.value + '/etc/tuxbox/config/oscam-smartcard' + dev_null)
+			os.system('mkdir -p ' + config.OscamSmartcard.ConfigPath.value + ' > /dev/null 2>&1')
 		except:
 			pass
 		self.makebackup()
