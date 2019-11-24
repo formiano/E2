@@ -66,7 +66,7 @@ class BluePanel(Screen, ConfigListScreen):
 				"cancel": self.cancel,
 				"green": self.save,
 				"red": self.cancel,
-                                "yellow": self.Yellow,
+				"yellow": self.Yellow,
 				"blue": self.ppanelShortcut,
 			},-1)
 
@@ -81,7 +81,7 @@ class BluePanel(Screen, ConfigListScreen):
 		self.EcmInfoPollTimer = eTimer()
 		self.EcmInfoPollTimer.callback.append(self.setEcmInfo)
 		self.EcmInfoPollTimer.start(1000)
-                self.Timer = eTimer()
+		self.Timer = eTimer()
 		self.partyfeed = os.path.exists("/etc/opkg/3rdparty-feed.conf") or os.path.exists("/etc/opkg/3rd-party-feed.conf")
 		if self.partyfeed:
 			self["key_yellow"]= Label(_("Install"))
@@ -89,24 +89,24 @@ class BluePanel(Screen, ConfigListScreen):
 			self["key_yellow"]= Label(_("Exit"))
 		try:
 			service = self.session.nav.getCurrentService()
-		        info = service and service.info()
-		        videosize = str(info.getInfo(iServiceInformation.sVideoWidth)) + 'x' + str(info.getInfo(iServiceInformation.sVideoHeight))
-		        aspect = info.getInfo(iServiceInformation.sAspect)
-		        if aspect in (1, 2, 5, 6, 9, 10, 13, 14):
+			info = service and service.info()
+			videosize = str(info.getInfo(iServiceInformation.sVideoWidth)) + 'x' + str(info.getInfo(iServiceInformation.sVideoHeight))
+			aspect = info.getInfo(iServiceInformation.sAspect)
+			if aspect in (1, 2, 5, 6, 9, 10, 13, 14):
 				aspect = '4:3'
-		        else:
-		                aspect = '16:9'
-		                provider = info.getInfoString(iServiceInformation.sProvider)
-		                chname = ServiceReference(self.session.nav.getCurrentlyPlayingServiceReference()).getServiceName()
-		                self['lb_provider'] = Label(_('Provider: ') + provider)
-		                self['lb_channel'] = Label(_('Name: ') + chname)
-		                self['lb_aspectratio'] = Label(_('Aspect Ratio: ') + aspect)
-		                self['lb_videosize'] = Label(_('Video Size: ') + videosize)
+			else:
+				aspect = '16:9'
+				provider = info.getInfoString(iServiceInformation.sProvider)
+				chname = ServiceReference(self.session.nav.getCurrentlyPlayingServiceReference()).getServiceName()
+				self['lb_provider'] = Label(_('Provider: ') + provider)
+				self['lb_channel'] = Label(_('Name: ') + chname)
+				self['lb_aspectratio'] = Label(_('Aspect Ratio: ') + aspect)
+				self['lb_videosize'] = Label(_('Video Size: ') + videosize)
 		except:
-		                self['lb_provider'] = Label(_('Provider: n/a'))
-		                self['lb_channel'] = Label(_('Name: n/a'))
-		                self['lb_aspectratio'] = Label(_('Aspect Ratio: n/a'))
-		                self['lb_videosize'] = Label(_('Video Size: n/a'))
+				self['lb_provider'] = Label(_('Provider: n/a'))
+				self['lb_channel'] = Label(_('Name: n/a'))
+				self['lb_aspectratio'] = Label(_('Aspect Ratio: n/a'))
+				self['lb_videosize'] = Label(_('Video Size: n/a'))
 		softcams = self.softcam.getList()
 		cardservers = self.cardserver.getList()
 
@@ -127,7 +127,7 @@ class BluePanel(Screen, ConfigListScreen):
 
 		self["key_red"] = Label(_("Cancel"))
 		self["key_green"] = Label(_("OK"))
-                self["key_yellow"] = Label(_("Install"))
+		self["key_yellow"] = Label(_("Install"))
 		self["key_blue"] = Label(_("Info"))
 		self.onShown.append(self.blueButton)
 
@@ -153,8 +153,8 @@ class BluePanel(Screen, ConfigListScreen):
 		if newEcmFound:
 			self["info"].setText("".join(ecmInfo))
 
-        def getCurrentValue(self):
-                return str(self["config"].getCurrent()[1].getText())
+	def getCurrentValue(self):
+		return str(self["config"].getCurrent()[1].getText())
 
 	def ppanelShortcut(self):
 		ppanelFileName = '/etc/ppanels/' + self.softcams.value + '.xml'
@@ -290,8 +290,12 @@ class ShowSoftcamPackages(Screen):
 		<screen name="ShowSoftcamPackages" position="center,center" size="630,500" title="Install Softcams" >
 			<ePixmap pixmap="skin_default/buttons/red.png" position="0,0" size="140,40" alphatest="on" />
 			<ePixmap pixmap="skin_default/buttons/green.png" position="140,0" size="140,40" alphatest="on" />
-			<widget source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
-			<widget source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
+			<ePixmap pixmap="skin_default/buttons/yellow.png" position="280,0" size="140,40" alphatest="on" />
+			<ePixmap pixmap="skin_default/buttons/blue.png" position="420,0" size="140,40" alphatest="on" />
+			<widget name="key_red,StaticText" source="key_red" render="Label" position="0,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#9f1313" transparent="1" />
+			<widget name="key_green,StaticText" source="key_green" render="Label" position="140,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
+			<widget name="key_yellow,StaticText" source="key_yellow" render="Label" position="280,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#a08500" transparent="1" />
+			<widget name="key_blue,StaticText" source="key_blue" render="Label" position="420,0" zPosition="1" size="140,40" font="Regular;18" halign="center" valign="center" backgroundColor="#18188b" transparent="1" />
 			<widget source="key_ok" render="Label" position="240,0" zPosition="1" size="140,40" font="Regular;20" halign="center" valign="center" backgroundColor="#1f771f" transparent="1" />
 			<widget source="list" render="Listbox" position="5,50" size="620,420" scrollbarMode="showOnDemand">
 				<convert type="TemplatedMultiContent">
@@ -318,16 +322,16 @@ class ShowSoftcamPackages(Screen):
 			"ok": self.go,
 			"cancel": self.exit,
 			"green": self.startupdateList,
-                        "yellow": self.oscamsmartcard,
+			"yellow": self.oscamsmartcard,
 		}, -1)
 		
 		self.list = []
 		self.statuslist = []
 		self["list"] = List(self.list)
-		self["key_red"] = StaticText(_("Close"))
-		self["key_green"] = StaticText(_("Reload"))
-		self["key_ok"] = StaticText(_("Install"))
-                self["key_yellow"] = StaticText(_("oscamsmartcard"))
+		self["key_red"] = Label(_("Close"))
+		self["key_green"] = Label(_("Reload"))
+		self["key_ok"] = Label(_("Install"))
+		self["key_yellow"] = Label(_("oscamsmartcard"))
 		self.oktext = _("\nPress OK on your remote control to continue.")
 		self.onShown.append(self.setWindowTitle)
 		self.setStatus('list')

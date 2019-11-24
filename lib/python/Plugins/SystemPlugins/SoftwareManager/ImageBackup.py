@@ -232,11 +232,11 @@ class ImageBackup(Screen):
 				self.message += VERSION + '\n'
 				self.message += "_________________________________________________\n\n"
 				self.message += _("Please be patient, a backup will now be made,\n")
-				self.message += _("because of the used filesystem the back-up\n")
+				self.message += _("because of the used filesystem the backup\n")
 				if self.RECOVERY:
-					self.message += _("will take about 30 minutes for this system\n")
+					self.message += _("will take about 1-4 minutes for this system\n")
 				else:
-					self.message += _("will take about 1-15 minutes for this system\n")
+					self.message += _("will take about 3-12 minutes for this system\n")
 				self.message += "_________________________________________________\n"
 				self.message += "'"
 
@@ -293,7 +293,7 @@ class ImageBackup(Screen):
 					cmdlist.append(cmd3)
 				cmdlist.append("chmod 644 %s/%s" %(self.WORKDIR, self.ROOTFSBIN))
 
-				if self.MODEL in ("gbquad4k","gbue4k"):
+				if self.MODEL in ("gbquad4k","gbue4k","gbx34k"):
 					cmdlist.append('echo "' + _("Create:") + " boot dump" + '"')
 					cmdlist.append("dd if=/dev/mmcblk0p1 of=%s/boot.bin" % self.WORKDIR)
 					cmdlist.append('echo "' + _("Create:") + " rescue dump" + '"')
@@ -463,7 +463,7 @@ class ImageBackup(Screen):
 	def doFullBackupCB(self):
 		cmdlist = []
 		cmdlist.append(self.message)
-		cmdlist.append('echo "' + _("Almost there... ") + '"')
+		cmdlist.append('echo "' + _("Wait for... ") + '"')
 		cmdlist.append('echo "' + _("Now building the Backup Image") + '"')
 
 		os.system('rm -rf %s' %self.MAINDEST)
@@ -505,7 +505,7 @@ class ImageBackup(Screen):
 		else:
 			cmdlist.append('echo "rename this file to "force" to force an update without confirmation" > %s/noforce' %self.MAINDEST)
 
-		if self.MODEL in ("gbquad4k","gbue4k"):
+		if self.MODEL in ("gbquad4k","gbue4k","gbx34k"):
 			os.system('mv %s/boot.bin %s/boot.bin' %(self.WORKDIR, self.MAINDEST))
 			os.system('mv %s/rescue.bin %s/rescue.bin' %(self.WORKDIR, self.MAINDEST))
 			os.system('cp -f /usr/share/gpt.bin %s/gpt.bin' %(self.MAINDEST))
@@ -586,7 +586,8 @@ class ImageBackup(Screen):
 			cmdlist.append('echo "' + _("Please wait...almost ready! ") + '"')
 			cmdlist.append('echo " "')
 			cmdlist.append('echo "' + _("To restore the image:") + '"')
-			cmdlist.append('echo "' + _("Please check the manual of the receiver") + '"')
+			cmdlist.append('echo "' + _("Use OnlineFlash in SoftwareManager") + '"')
+			cmdlist.append('echo "' + _("Otherwise, please check the receiver manual") + '"')
 			cmdlist.append('echo "' + _("on how to restore the image") + '"')
 		else:
 			cmdlist.append('echo "_________________________________________________\n"')

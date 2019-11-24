@@ -20,8 +20,8 @@ from Components.config import config,getConfigListEntry, ConfigSubsection, Confi
 from Components.ConfigList import ConfigListScreen
 from boxbranding import getBoxType,getImageDistro, getMachineBuild, getMachineBrand,getMachineName
 
-feedurl = 'http://images.opendroid.org/6.8'
-imagecat = [6.8]
+feedurl = 'http://images.opendroid.org/7.0'
+imagecat = [7.0]
 
 def checkimagefiles(files):
 	return len([x for x in files if 'kernel' in x and '.bin' in x or x in ('zImage', 'uImage', 'root_cfe_auto.bin', 'root_cfe_auto.jffs2', 'oe_kernel.bin', 'oe_rootfs.bin', 'e2jffs2.img', 'rootfs.tar.bz2', 'rootfs.ubi','rootfs.bin')]) >= 2
@@ -72,33 +72,33 @@ class FlashOnline(Screen):
 	def getImagesList(self):
 
 		def getImages(path, files):
-		        try:
-		                print self.imagesList[("Downloaded Images")]
-		        except:
-		                self.imagesList[("Downloaded Images")] = {} 
-		        try:
-                                print self.imagesList[("Fullbackup Images")]
-                        except:        
-                                self.imagesList[("Fullbackup Images")] = {}
-                        for file in [x for x in files if os.path.splitext(x)[1] == ".zip" and box in x]:
-                                try:
-                                        if checkimagefiles([x.split(os.sep)[-1] for x in zipfile.ZipFile(file).namelist()]):
-                                                if 'backup' in file.split(os.sep)[-1]:
-                                                        self.imagesList[("Fullbackup Images")][file] = {'link': file, 'name': file.split(os.sep)[-1]}
-                                                else:
-                                                        self.imagesList[("Downloaded Images")][file] = {'link': file, 'name': file.split(os.sep)[-1]}
+			try:
+				print self.imagesList[("Downloaded Images")]
+			except:
+				self.imagesList[("Downloaded Images")] = {} 
+			try:
+				print self.imagesList[("Fullbackup Images")]
+			except:        
+				self.imagesList[("Fullbackup Images")] = {}
+			for file in [x for x in files if os.path.splitext(x)[1] == ".zip" and box in x]:
+				try:
+					if checkimagefiles([x.split(os.sep)[-1] for x in zipfile.ZipFile(file).namelist()]):
+						if 'backup' in file.split(os.sep)[-1]:
+							self.imagesList[("Fullbackup Images")][file] = {'link': file, 'name': file.split(os.sep)[-1]}
+						else:
+							self.imagesList[("Downloaded Images")][file] = {'link': file, 'name': file.split(os.sep)[-1]}
 
 				except:
 					pass
 
 		if not self.imagesList:
 			box = getBoxType()
-                        brand = getMachineBrand()
+			brand = getMachineBrand()
 			for version in reversed(sorted(imagecat)):
 				newversion = _("Image Version %s") %version
 				the_page =""
 				url = '%s/%s/%s' % (feedurl,brand,box)
-                                try:
+				try:
 					req = urllib2.Request(url)
 					response = urllib2.urlopen(req)
 				except urllib2.URLError as e:
@@ -113,7 +113,7 @@ class FlashOnline(Screen):
 
 				lines = the_page.split('\n')
 				tt = len(box)
-                                b = len(brand)
+				b = len(brand)
 				countimage = []
 				for line in lines:
 					if line.find('<a href="o') > -1:
@@ -330,11 +330,11 @@ class FlashImage(Screen):
 					if isDevice or 'no_backup' == retval:
 						self.startBackupsettings(retval)
 					else:
-						self.session.openWithCallback(self.startBackupsettings, MessageBox, _("Can only find a network drive to store the backup this means after the flash the autorestore will not work. Alternativaly you can mount the network drive after the flash and perform a manufacurer reset to autorestore"), simple=True)
+						self.session.openWithCallback(self.startBackupsettings, MessageBox, _("Can only find a network drive to store the backup this means after the flash the autorestore will not work. Alternatively you can mount the network drive after the flash and perform a manufacturer reset to autorestore"), simple=True)
 				except:
 					self.session.openWithCallback(self.abort, MessageBox, _("Unable to create the required directories on the media (e.g. USB stick or Harddisk) - Please verify media and try again!"), type=MessageBox.TYPE_ERROR, simple=True)
 			else:
-				self.session.openWithCallback(self.abort, MessageBox, _("Could not find suitable media - Please remove some downloaded images or insert a media (e.g. USB stick) with sufficiant free space and try again!"), type=MessageBox.TYPE_ERROR, simple=True)
+				self.session.openWithCallback(self.abort, MessageBox, _("Could not find suitable media - Please remove some downloaded images or insert a media (e.g. USB stick) with sufficient free space and try again!"), type=MessageBox.TYPE_ERROR, simple=True)
 		else:
 			self.abort()
 
@@ -529,7 +529,7 @@ class FlashImage(Screen):
 			self.session.openWithCallback(self.abort, MessageBox, _("Error during unzipping image\n%s") % self.imagename, type=MessageBox.TYPE_ERROR, simple=True)
 
 	def flashimage(self):
-	        os.system('rm /sbin/init;ln -sfn /sbin/init.sysvinit /sbin/init')
+		os.system('rm /sbin/init;ln -sfn /sbin/init.sysvinit /sbin/init')
 		self["header"].setText(_("Flashing Image"))
 		self["summary_header"].setText(self["header"].getText())
 		def findimagefiles(path):
@@ -550,8 +550,6 @@ class FlashImage(Screen):
 					print "[FlashImage] detect Kernel:",self.MTDKERNEL
 					print "[FlashImage] detect rootfs:",self.MTDROOTFS
 					command = "/usr/bin/ofgwrite -r%s -k%s %s" % (self.MTDROOTFS, self.MTDKERNEL, imagefiles)
-				elif getMachineBuild() in ("hd60","hd61","h9combo","h10","multibox"): # issue with framebuffer force reboot after flashing
-					command = "/usr/bin/ofgwrite -f -r -k -m%s %s" % (self.multibootslot, imagefiles)
 				else:
 					command = "/usr/bin/ofgwrite -r -k -m%s %s" % (self.multibootslot, imagefiles)
 			elif getMachineBuild() in ("u5pvr","u5","u51","u52","u53","u532","u533","u54","u56"): # issue detect kernel device
