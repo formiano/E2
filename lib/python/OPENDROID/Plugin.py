@@ -1,9 +1,14 @@
+from enigma import eTimer, eConsoleAppContainer
 from Screens.Screen import Screen
 from Screens.MessageBox import MessageBox
 from Components.Sources.StaticText import StaticText
 from Components.Pixmap import Pixmap
 from Components.ActionMap import ActionMap
 from Components.Sources.List import List
+from Components.Label import Label
+from Components.Sources.StaticText import StaticText
+from Components.Button import Button
+from Components.PluginComponent import plugins
 from Components.MultiContent import MultiContentEntryText, MultiContentEntryPixmapAlphaTest
 from Components.Label import Label
 from Components.MenuList import MenuList
@@ -270,13 +275,13 @@ class AdvInstallIpk(Screen):
 		try:
 			item = self["menu"].getCurrent()
 			name = item[0]
-			self.session.open(Console,title = _("Install ipk packets"), cmdlist = ["opkg install -force-overwrite -force-downgrade /tmp/%s" % name])
+			self.session.open(Console,title = "Install ipk packets", cmdlist = ["opkg install /tmp/%s" % name])
 		except:
 			pass
 		
 	def okInstAll(self):
 		name = "*.ipk"
-		self.session.open(Console,title = _("Install ipk packets"), cmdlist = ["opkg install -force-overwrite -force-downgrade /tmp/%s" % name])
+		self.session.open(Console,title = "Install ipk packets", cmdlist = ["opkg install /tmp/%s" % name])
 		
 	def cancel(self):
 		self.close()
