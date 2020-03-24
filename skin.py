@@ -29,6 +29,7 @@ fonts = {
 parameters = {}
 constant_widgets = {}
 variables = {}
+DEFAULT_SKIN = "Multibox/skin.xml"
 DEFAULT_DISPLAY_SKIN = "skin_display.xml"
 isOPDSkin = False
 
@@ -58,13 +59,13 @@ class SkinError(Exception):
 	def __init__(self, message):
 		self.msg = message
 	def __str__(self):
-		return "[Skin] {%s}: %s. Please contact the skin's author!" % (config.skin.primary_skin.value, self.msg)
+		return "{%s}: %s. Please contact the skin's author!" % (config.skin.primary_skin.value, self.msg)
 
 class DisplaySkinError(Exception):
 	def __init__(self, message):
 		self.msg = message
 	def __str__(self):
-		return "[Skin] {%s}: %s. Please contact the skin's author!" % (config.skin.display_skin.value, self.msg)
+		return "{%s}: %s. Please contact the skin's author!" % (config.skin.display_skin.value, self.msg)
 
 dom_skins = [ ]
 
@@ -93,8 +94,8 @@ def loadSkin(name, scope = SCOPE_SKIN):
 def get_modular_files(name, scope = SCOPE_SKIN):
 	dirname = resolveFilename(scope, name + 'mySkin/')
 	file_list = []
-	if fileExists(dirname):
-		skin_files = (listdir(dirname))
+	if fileExists(dirname) and config.skin.primary_skin.value != DEFAULT_SKIN:
+		skin_files = (os.listdir(dirname))
 		if len(skin_files):
 			for f in skin_files:
 				if f.startswith('skin_') and f.endswith('.xml'):
@@ -104,15 +105,6 @@ def get_modular_files(name, scope = SCOPE_SKIN):
 
 
 config.skin = ConfigSubsection()
-config.defaultskinSetup = ConfigSubsection()
-config.defaultskinSetup.steps = ConfigSelection([('default Multibox',_("default Multibox")),('default OPD-Blue-Line',_("default OPD-Blue-Line"))])
-if config.defaultskinSetup.steps.value == "default OPD-Blue-Line":
-	DEFAULT_SKIN = "Multibox/skin.xml"
-elif config.defaultskinSetup.steps.value == "default Multibox":
-	DEFAULT_SKIN = "skin_default/skin.xml"
-
-if not fileExists(resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)):
-	DEFAULT_SKIN = "Multibox/skin.xml"
 config.skin.primary_skin = ConfigText(default = DEFAULT_SKIN)
 config.skin.display_skin = ConfigText(default = DEFAULT_DISPLAY_SKIN)
 if SystemInfo["FrontpanelDisplay"] or SystemInfo["LcdDisplay"] or SystemInfo["OledDisplay"] or SystemInfo["FBLCDDisplay"]:
@@ -133,7 +125,6 @@ def skinExists(skin = False):
 skinExists()
 
 def getSkinPath():
-	#primary_skin_path = config.skin.primary_skin.value.replace('skin.xml', '')
 	p = config.skin.primary_skin.value
 	primary_skin_path = p[:p.rfind('/')+1]
 	if not primary_skin_path.endswith('/'):
@@ -239,6 +230,96 @@ try:
 	print "[SKIN loading user defined clock file for skin", (primary_skin_path + 'skin_user_clock.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined clock file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_frame.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined frame file for skin", (primary_skin_path + 'skin_user_frame.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined frame file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_lines.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined lines file for skin", (primary_skin_path + 'skin_user_lines.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined lines file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_sbar.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined sbar file for skin", (primary_skin_path + 'skin_user_sbar.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined sbar file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_wget.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined wget file for skin", (primary_skin_path + 'skin_user_wget.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined wget file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_emcsel.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined emcsel file for skin", (primary_skin_path + 'skin_user_emcsel.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined emcsel file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_volume.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined volume file for skin", (primary_skin_path + 'skin_user_volume.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined volume file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_movsel.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined movsel file for skin", (primary_skin_path + 'skin_user_movsel.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined movsel file for skin"
+try:
+	loadSkin(primary_skin_path + 'skin_user_center.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined center file for skin", (primary_skin_path + 'skin_user_center.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined center file for skin"
+try:
+	loadSkin(primary_skin_path + 'infobar_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'infobar_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'sib_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'sib_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'ch_se_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'ch_se_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'ev_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'ev_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'sb_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'sb_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'emcsel_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'emcsel_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'frame_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'frame_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'lines_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'lines_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'sbar_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'sbar_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
+try:
+	loadSkin(primary_skin_path + 'wget_Original.xml', SCOPE_SKIN)
+	print "[SKIN loading user defined Original file for skin", (primary_skin_path + 'wget_Original.xml')
+except (SkinError, IOError, AssertionError), err:
+	print "[SKIN] not loading user defined Original file for skin"
 
 def load_modular_files():
 	modular_files = get_modular_files(primary_skin_path, SCOPE_SKIN)

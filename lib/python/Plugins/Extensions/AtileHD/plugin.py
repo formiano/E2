@@ -37,7 +37,7 @@ def Plugins(**kwargs):
 	return [PluginDescriptor(name=_("%s Setup") % cur_skin, description=_("Personalize your Skin"), where = PluginDescriptor.WHERE_MENU, icon="plugin.png", fnc=menu)]
 
 def menu(menuid, **kwargs):
-	if menuid == "mainmenu" and not config.skin.primary_skin.value == "oDreamy-FHD/skin.xml":
+	if menuid == "mainmenu" and not config.skin.primary_skin.value == "Ultimate/skin.xml":
 		return [(_("Setup - %s") % cur_skin, main, "atilehd_setup", None)]
 	else:
 		pass
@@ -126,24 +126,23 @@ class AtileHD_Config(Screen, ConfigListScreen):
 			self.default_font_file = "font_atile_Roboto.xml"
 			self.default_color_file = "colors_atile_Grey_transparent.xml"
 		else:
-			self.default_background_file = "background_Original.xml"
 			self.default_color_file = "colors_Original.xml"
-
+		self.default_background_file = "background_Original.xml"
+		self.default_sb_file = "sb_Original.xml"
 		self.default_infobar_file = "infobar_Original.xml"
 		self.default_sib_file = "sib_Original.xml"
 		self.default_ch_se_file = "ch_se_Original.xml"
 		self.default_ev_file = "ev_Original.xml"
-		self.default_sb_file = "sb_Original.xml"
 		self.default_clock_file = "clock_Original.xml"
 		self.default_ul_file = "ul_Original.xml"
 
 		self.color_file = "skin_user_colors.xml"
 		self.background_file = "skin_user_background.xml"
+		self.sb_file = "skin_user_sb.xml"
 		self.infobar_file = "skin_user_infobar.xml"
 		self.sib_file = "skin_user_sib.xml"
 		self.ch_se_file = "skin_user_ch_se.xml"
 		self.ev_file = "skin_user_ev.xml"
-		self.sb_file = "skin_user_sb.xml"
 		self.clock_file = "skin_user_clock.xml"
 		self.ul_file = "skin_user_ul.xml"
 
@@ -153,6 +152,9 @@ class AtileHD_Config(Screen, ConfigListScreen):
 		# background
 		current, choices = self.getSettings(self.default_background_file, self.background_file)
 		self.myAtileHD_background = NoSave(ConfigSelection(default=current, choices = choices))
+		# sb
+		current, choices = self.getSettings(self.default_sb_file, self.sb_file)
+		self.myAtileHD_sb = NoSave(ConfigSelection(default=current, choices = choices))
 		# infobar
 		current, choices = self.getSettings(self.default_infobar_file, self.infobar_file)
 		self.myAtileHD_infobar = NoSave(ConfigSelection(default=current, choices = choices))
@@ -165,9 +167,6 @@ class AtileHD_Config(Screen, ConfigListScreen):
 		# ev
 		current, choices = self.getSettings(self.default_ev_file, self.ev_file)
 		self.myAtileHD_ev = NoSave(ConfigSelection(default=current, choices = choices))
-		# sb
-		current, choices = self.getSettings(self.default_sb_file, self.sb_file)
-		self.myAtileHD_sb = NoSave(ConfigSelection(default=current, choices = choices))
 		# clock
 		current, choices = self.getSettings(self.default_clock_file, self.clock_file)
 		self.myAtileHD_clock = NoSave(ConfigSelection(default=current, choices = choices))
@@ -192,12 +191,16 @@ class AtileHD_Config(Screen, ConfigListScreen):
 
 		# possible setting
 		choices = []
-		for f in sorted(listdir(self.skin_base_dir), key=str.lower):
+		files = listdir(self.skin_base_dir)
+		if path.exists(self.skin_base_dir + 'allScreens/%s/' %styp):
+			files += listdir(self.skin_base_dir + 'allScreens/%s/' %styp)
+		for f in sorted(files, key=str.lower):
 			if f.endswith('.xml') and f.startswith(search_str):
-				friendly_name = f.replace(search_str, "")
-				friendly_name = friendly_name.replace(".xml", "")
-				friendly_name = friendly_name.replace("_", " ")
-				choices.append((f, friendly_name))
+				friendly_name = f.replace(search_str, "").replace(".xml", "").replace("_", " ")
+				if path.exists(self.skin_base_dir + 'allScreens/%s/%s' %(styp,f)):
+					choices.append((self.skin_base_dir + 'allScreens/%s/%s' %(styp,f), friendly_name))
+				else:
+					choices.append((self.skin_base_dir + f, friendly_name))
 		choices.append(default)
 
 		# current setting
@@ -209,16 +212,18 @@ class AtileHD_Config(Screen, ConfigListScreen):
 					remove(myfile)
 				chdir(self.skin_base_dir)
 				symlink(default_file, user_file)
+			elif path.exists(self.skin_base_dir + 'allScreens/%s/%s' %(styp, default_file)):
+				if path.islink(myfile):
+					remove(myfile)
+				chdir(self.skin_base_dir)
+				symlink(self.skin_base_dir + 'allScreens/%s/%s' %(styp, default_file), user_file)
 			else:
 				current = None
 		if current is None:
 			current = default
 		else:
 			filename = path.realpath(myfile)
-			filename = path.basename(filename)
-			friendly_name = filename.replace(search_str, "")
-			friendly_name = friendly_name.replace(".xml", "")
-			friendly_name = friendly_name.replace("_", " ")
+			friendly_name = path.basename(filename).replace(search_str, "").replace(".xml", "").replace("_", " ")
 			current = (filename, friendly_name)
 
 		return current[0], choices
@@ -226,29 +231,38 @@ class AtileHD_Config(Screen, ConfigListScreen):
 	def createConfigList(self):
 		self.set_color = getConfigListEntry(_("Style:"), self.myAtileHD_color)
 		self.set_background = getConfigListEntry(_("Background:"), self.myAtileHD_background)
-		self.set_sb = getConfigListEntry(_("ColorSelectedBackground:"), self.myAtileHD_sb)
+		self.set_sb = getConfigListEntry(_("Backgroundselected:"), self.myAtileHD_sb)
 		self.set_infobar = getConfigListEntry(_("Infobar:"), self.myAtileHD_infobar)
 		self.set_sib = getConfigListEntry(_("Secondinfobar:"), self.myAtileHD_sib)
 		self.set_ch_se = getConfigListEntry(_("Channelselection:"), self.myAtileHD_ch_se)
 		self.set_ev = getConfigListEntry(_("Eventview:"), self.myAtileHD_ev)
 		self.set_clock = getConfigListEntry(_("Clock:"), self.myAtileHD_clock)
-		self.set_ul = getConfigListEntry(_("UserLogo:"), self.myAtileHD_ul)
+		self.set_ul = getConfigListEntry(_("Userlogo:"), self.myAtileHD_ul)
 		self.set_myatile = getConfigListEntry(_("Enable %s pro:") % cur_skin, self.myAtileHD_active)
 		self.set_new_skin = getConfigListEntry(_("Change skin"), ConfigNothing())
 		self.list = []
 		self.list.append(self.set_myatile)
-		self.list.append(self.set_color)
-		self.list.append(self.set_background)
-		self.list.append(self.set_sb)
-		self.list.append(self.set_infobar)
-		self.list.append(self.set_sib)
-		self.list.append(self.set_ch_se)
-		self.list.append(self.set_ev)
-		self.list.append(self.set_clock)
-		self.list.append(self.set_ul)
+		if len(self.myAtileHD_color.choices)>1:
+			self.list.append(self.set_color)
+		if len(self.myAtileHD_background.choices)>1:
+			self.list.append(self.set_background)
+		if len(self.myAtileHD_sb.choices)>1:
+			self.list.append(self.set_sb)
+		if len(self.myAtileHD_infobar.choices)>1:
+			self.list.append(self.set_infobar)
+		if len(self.myAtileHD_sib.choices)>1:
+			self.list.append(self.set_sib)
+		if len(self.myAtileHD_ch_se.choices)>1:
+			self.list.append(self.set_ch_se)
+		if len(self.myAtileHD_ev.choices)>1:
+			self.list.append(self.set_ev)
+		if len(self.myAtileHD_clock.choices)>1:
+			self.list.append(self.set_clock)
+		if len(self.myAtileHD_ul.choices)>1:
+			self.list.append(self.set_ul)
 		self.list.append(self.set_new_skin)
-		if not config.skin.primary_skin.value == "oDreamy-FHD/skin.xml":
-			self["config"].list = self.list
+		#if not config.skin.primary_skin.value == "oDreamy-FHD/skin.xml":
+		self["config"].list = self.list
 		self["config"].l.setList(self.list)
 		if self.myAtileHD_active.value:
 			self["key_yellow"].setText("%s pro" % cur_skin)
@@ -271,8 +285,6 @@ class AtileHD_Config(Screen, ConfigListScreen):
 			self.setPicture(self.myAtileHD_ch_se.value)
 		elif self["config"].getCurrent() == self.set_ev:
 			self.setPicture(self.myAtileHD_ev.value)
-		elif self["config"].getCurrent() == self.set_sb:
-			self.setPicture(self.myAtileHD_sb.value)
 		elif self["config"].getCurrent() == self.set_clock:
 			self.setPicture(self.myAtileHD_clock.value)
 		elif self["config"].getCurrent() == self.set_ul:
@@ -288,6 +300,8 @@ class AtileHD_Config(Screen, ConfigListScreen):
 			self.setPicture(self.myAtileHD_color.value)
 		elif self["config"].getCurrent() == self.set_background:
 			self.setPicture(self.myAtileHD_background.value)
+		elif self["config"].getCurrent() == self.set_sb:
+			self.setPicture(self.myAtileHD_sb.value)
 		elif self["config"].getCurrent() == self.set_infobar:
 			self.setPicture(self.myAtileHD_infobar.value)
 		elif self["config"].getCurrent() == self.set_sib:
@@ -296,8 +310,6 @@ class AtileHD_Config(Screen, ConfigListScreen):
 			self.setPicture(self.myAtileHD_ch_se.value)
 		elif self["config"].getCurrent() == self.set_ev:
 			self.setPicture(self.myAtileHD_ev.value)
-		elif self["config"].getCurrent() == self.set_sb:
-			self.setPicture(self.myAtileHD_sb.value)
 		elif self["config"].getCurrent() == self.set_clock:
 			self.setPicture(self.myAtileHD_clock.value)
 		elif self["config"].getCurrent() == self.set_ul:
@@ -333,7 +345,7 @@ class AtileHD_Config(Screen, ConfigListScreen):
 			return False
 
 	def setPicture(self, f):
-		pic = f.replace(".xml", ".png")
+		pic = f.split('/')[-1].replace(".xml", ".png")
 		preview = self.skin_base_dir + "preview/preview_" + pic
 		if path.exists(preview):
 			self["Picture"].instance.setPixmapFromFile(preview)
@@ -522,7 +534,7 @@ class AtileHDScreens(Screen):
 		self.is_atile = False
 		if cur_skin == 'AtileHD':
 			self.is_atile = True
-		
+
 		self.title = _("%s additional screens") % cur_skin
 		try:
 			self["title"]=StaticText(self.title)
