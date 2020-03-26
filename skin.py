@@ -70,13 +70,20 @@ class DisplaySkinError(Exception):
 dom_skins = [ ]
 
 def addSkin(name, scope = SCOPE_SKIN):
+	# read the skin
+	if name is None or not len(name):
+		print "[SKIN ERROR] attempt to add a skin without filename"
+		return False
 	filename = resolveFilename(scope, name)
 	if fileExists(filename):
 		mpath = os.path.dirname(filename) + "/"
-		file = open(filename, 'r')
-		dom_skins.append((mpath, xml.etree.cElementTree.parse(file).getroot()))
-		file.close()
-		return True
+		try:
+			dom_skins.append((mpath, xml.etree.cElementTree.parse(filename).getroot()))
+		except:
+			print "[SKIN ERROR] error in %s" % filename
+			return False
+		else:
+			return True
 	return False
 
 def skin_user_skinname():
@@ -171,60 +178,61 @@ except:
 
 addSkin('skin_subtitles.xml')
 
+if config.skin.primary_skin.value != DEFAULT_SKIN:
+	skinpath = resolveFilename(SCOPE_SKIN, primary_skin_path)
+	if os.path.isdir(skinpath):
+		for file in sorted(os.listdir(skinpath)):
+			if file.startswith('skin_user_') and file.endswith('.xml'):
+				try:
+					addSkin(primary_skin_path + file, SCOPE_SKIN)
+					print "[SKIN] loading user defined %s skin file: %s" %(file.replace('skin_user_','')[:-4], primary_skin_path + file)
+				except (SkinError, IOError, OSError, AssertionError), err:
+					print "[SKIN] not loading user defined %s skin file: %s - error: %s" %(file.replace('skin_user_','')[:-4], primary_skin_path + file, err)
 try:
 	loadSkin(primary_skin_path + 'skin_user_colors.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined colors for skin", (primary_skin_path + 'skin_user_colors.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined colors for skin"
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_background.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined background for skin", (primary_skin_path + 'skin_user_background.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined background for skin"	
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_header.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined header file for skin", (primary_skin_path + 'skin_user_header.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined header file for skin"
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_infobar.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined infobar file for skin", (primary_skin_path + 'skin_user_infobar.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined infobar file for skin"
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_sib.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined sib file for skin", (primary_skin_path + 'skin_user_sib.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined sib file for skin"
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_ch_se.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined ch_se file for skin", (primary_skin_path + 'skin_user_ch_se.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined ch_se file for skin"
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_ev.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined ev file for skin", (primary_skin_path + 'skin_user_ev.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined ev file for skin"	
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_sb.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined sb file for skin", (primary_skin_path + 'skin_user_sb.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined sb file for skin"
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_ul.xml', SCOPE_SKIN)
 	print "[SKIN] loading user defined ul file for skin", (primary_skin_path + 'skin_user_ul.xml')
 except (SkinError, IOError, AssertionError), err:
 	print "[SKIN] not loading user defined ul file for skin"
-
 try:
 	loadSkin(primary_skin_path + 'skin_user_clock.xml', SCOPE_SKIN)
 	print "[SKIN loading user defined clock file for skin", (primary_skin_path + 'skin_user_clock.xml')
@@ -326,7 +334,7 @@ def load_modular_files():
 	if len(modular_files):
 		for f in modular_files:
 			try:
-				loadSkin(primary_skin_path + f, SCOPE_SKIN)
+				addSkin(primary_skin_path + f, SCOPE_SKIN)
 				print "[SKIN] loading modular skin file : ", (primary_skin_path + f)
 			except (SkinError, IOError, AssertionError), err:
 				print "[SKIN] failed to load modular skin file : ", err
