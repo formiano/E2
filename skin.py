@@ -52,7 +52,7 @@ switchPixmap = {}  # Dictionary of switch images.
 windowStyles = {}  # Dictionary of window styles for each screen ID.
 constantWidgets = {}
 variables = {}
-isVTISkin = False  # Temporary flag to suppress errors in OpenATV.
+isOPDSkin = False  # Temporary flag to suppress errors in OPD.
 
 config.skin = ConfigSubsection()
 skin = resolveFilename(SCOPE_SKIN, DEFAULT_SKIN)
