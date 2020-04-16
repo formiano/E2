@@ -62,6 +62,13 @@ if not fileExists(skin) or not os.path.isfile(skin):
 config.skin.primary_skin = ConfigText(default=DEFAULT_SKIN)
 config.skin.display_skin = ConfigText(default=DEFAULT_DISPLAY_SKIN)
 
+def findUserRelatedSkin():
+	if os.path.isfile(resolveFilename(SCOPE_SKIN, config.skin.primary_skin.value)):
+		name = USER_SKIN_TEMPLATE % os.path.dirname(config.skin.primary_skin.value)
+		if fileExists(resolveFilename(SCOPE_CURRENT_SKIN, name)):
+			return name
+	return None
+
 def addSkin(name, scope=SCOPE_CURRENT_SKIN):
 	global domSkins
 	filename = resolveFilename(scope, name)
@@ -96,6 +103,12 @@ profile("LoadSkin")
 # Add an optional skin related user skin "user_skin_<SkinName>.xml".  If there is
 # not a skin related user skin then try to add am optional generic user skin.
 result = None
+name = findUserRelatedSkin()
+if name:
+	result = addSkin(name, scope=SCOPE_CURRENT_SKIN)
+if not name or not result:
+	addSkin(USER_SKIN, scope=SCOPE_CURRENT_SKIN)
+
 currentPrimarySkin = None
 currentDisplaySkin = None
 if SystemInfo["FrontpanelDisplay"] or SystemInfo["LcdDisplay"] or SystemInfo["OledDisplay"] or SystemInfo["FBLCDDisplay"]:
