@@ -47,7 +47,7 @@ def InitConfig():
 		'/etc/wpa_supplicant.wlan0.conf', '/etc/resolv.conf', '/etc/hostname', '/etc/epgimport/',
 		eEnv.resolve("${datadir}/enigma2/keymap.usr")]\
 		+eEnv_resolve_multi("${datadir}/enigma2/*/mySkin_off")\
-		+eEnv_resolve_multi("${datadir}/enigma2/*/mySkin_off")\
+		+eEnv_resolve_multi("${datadir}/enigma2/*/mySkin")\
 		+eEnv_resolve_multi("${datadir}/enigma2/*/skin_user_*.xml")\
 		+eEnv_resolve_multi('/usr/bin/*cam*')\
 		+eEnv_resolve_multi('/etc/cron*')\
