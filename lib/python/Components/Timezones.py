@@ -300,6 +300,9 @@ class Timezones:
 			e_tzset()
 		if path.exists("/proc/stb/fp/rtc_offset"):
 			setRTCoffset()
+		now = int(time())
+		timeFormat = "%a %d-%b-%Y %H:%M:%S"
+		print "[Timezones] Local time is '%s'  -  UTC time is '%s'." % (strftime(timeFormat, localtime(now)), strftime(timeFormat, gmtime(now)))
 		if runCallbacks:
 			for method in self.callbacks:
 				if method:
